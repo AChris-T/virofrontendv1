@@ -9,11 +9,12 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist';
-import storage from 'redux-persist/lib/storage'; // defaults to localStorage
+import storage from 'redux-persist/lib/storage';
 import { AuthApi } from './auth/auth.api';
 import { ProfileApi } from './profile/profile.api';
 import { DashboardApi } from './dashboard/dashboard.api';
 import profileReducer from './profile/profile.slice';
+import onboardingReducer from './onboarding/onboarding.slice';
 
 const profilePersistConfig = {
   key: 'profile',
@@ -28,6 +29,7 @@ const persistedProfileReducer = persistReducer(
 
 export const store = configureStore({
   reducer: {
+    onboarding: onboardingReducer,
     profile: persistedProfileReducer,
     [DashboardApi.reducerPath]: DashboardApi.reducer,
     [AuthApi.reducerPath]: AuthApi.reducer,

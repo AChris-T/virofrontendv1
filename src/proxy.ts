@@ -9,7 +9,7 @@ export async function proxy(request: NextRequest) {
   const role = typeof session === 'string' ? undefined : session?.role;
   const { pathname } = request.nextUrl;
   const authPages = ['/signin', '/signup'];
-  const protectedRoutes = ['/dashboard'];
+  const protectedRoutes = ['/dashboard', '/onboarding'];
   const adminOnlyRoutes = ['/dashboard/admin'];
 
   if (token && authPages.includes(pathname)) {
@@ -41,5 +41,5 @@ export async function proxy(request: NextRequest) {
 
 // ✅ renamed from "config" to "proxyConfig"
 export const proxyConfig = {
-  matcher: ['/dashboard/:path*', '/signin', '/signup'],
+  matcher: ['/dashboard/:path*', '/signin', '/signup', '/onboarding/:path*'],
 };
