@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/api/proxy/:path*',
-        destination: `http://185.200.244.48/api/v1/:path*`,
+        destination: `${process.env.API_BASE_URL}/api/v1:path*`,
       },
     ];
   },
