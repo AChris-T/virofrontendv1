@@ -9,14 +9,7 @@ const nextConfig: NextConfig = {
       },
     },
   },
-  async rewrites() {
-    return [
-      {
-        source: '/api/proxy/:path*',
-        destination: `${process.env.API_BASE_URL}/api/v1:path*`,
-      },
-    ];
-  },
+
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'i.pravatar.cc' },
