@@ -6,15 +6,14 @@ import { generateMetadata } from '@/utils/metadata';
 
 export const metadata: Metadata = generateMetadata({
   title: 'Viro | Signin',
-  description:
-    'Sign in to your Viro account to access a community of believers passionately committed to walking in the footsteps of Jesus Christ.',
+  description: 'Sign in to your Viro',
   url: '/signin',
 });
 
 export default function SignIn() {
   return (
     <Suspense fallback={<Loading />}>
-      <SignInForm />;
+      <SignInForm />
     </Suspense>
   );
 }

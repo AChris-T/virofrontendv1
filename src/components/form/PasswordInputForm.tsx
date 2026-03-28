@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import InputForm from './InputForm';
+import { EyeCloseIcon, EyeIcon } from '@/assets/icons';
 
 interface PasswordInputFormProps {
   name: string;
@@ -40,7 +41,11 @@ export default function PasswordInputForm({
           onClick={toggleVisibility}
           className="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-8"
         >
-          {visible ? 'Eye ' : 'EyeC'}
+          {visible ? (
+            <EyeIcon className="fill-gray-500 dark:fill-gray-400" />
+          ) : (
+            <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400" />
+          )}
         </span>
       </div>
     </div>
