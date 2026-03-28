@@ -7,13 +7,13 @@ import { setUser } from '@/store/profile/profile.slice';
 
 export default function Profile() {
   const dispatch = useDispatch();
-  const { data, refetch } = useGetMeQuery();
+  const { data } = useGetMeQuery();
+
   useEffect(() => {
-    refetch();
-    if (data?.data) {
-      dispatch(setUser(data.data));
+    if (data?.user) {
+      dispatch(setUser(data.user));
     }
-  }, [data, dispatch, refetch]);
+  }, [data, dispatch]);
 
   return null;
 }

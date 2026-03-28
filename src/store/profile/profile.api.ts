@@ -1,61 +1,34 @@
 import { axiosBaseQuery } from '@/lib/baseApi';
 import { createApi } from '@reduxjs/toolkit/query/react';
-
-interface AuthResponse {
-  success: boolean;
-  message: string;
-  data?: {
-    token?: string;
-  };
-}
-
-interface Dashboard {
-  ongoing_course: number;
-  completed_course: number;
-  hours_spent: number;
-  current_ongoing_course: {
-    title: string;
-  };
-  certificate: number;
-}
+import { User } from './profile.slice';
 
 interface MeResponse {
-  status: boolean;
-  message: string;
-  data: {
-    id: number;
-    full_name: string;
-    email: string;
-    role: string;
-    provider?: string;
-    avatar?: string;
-    dashboard: Dashboard;
-    deleted_at: string | null;
-    created_at: string;
-    updated_at: string;
-  };
+  success: boolean;
+  message?: string;
+  user: User | null;
+  timestamp?: string;
 }
-interface UpdateProfileRequest {
-  full_name: string;
-  email: string;
+interface OnboardingResponse {
+  success: boolean;
+  message: string;
+}
+interface WorkSpaceSetUpResponse {
+  success: boolean;
+  message: string;
 }
 
-interface UpdateProfileResponse {
-  status: boolean;
-  message: string;
-  data: {
-    id: number;
-    full_name: string;
-    email: string;
-    role: string;
-    provider?: string;
-    avatar?: string;
-  };
+export interface WorkSpaceSetUpRequestPayload {
+  workspace_name: string;
+  teamspace_name: string;
 }
-interface ResetAccountPasswordPayload {
-  current_password: string;
-  new_password: string;
-  new_password_confirmation: string;
+
+export interface OnboardingRequestPayload {
+  personalized: string;
+  help_options: string[];
+  notification_preferences: {
+    additionalProp1: unknown;
+    additionalProp2: unknown;
+  };
 }
 
 export const ProfileApi = createApi({
@@ -65,47 +38,65 @@ export const ProfileApi = createApi({
   endpoints: (builder) => ({
     getMe: builder.query<MeResponse, void>({
       query: () => ({
-        url: '/api/me',
+        url: '/account/me',
         method: 'GET',
       }),
       providesTags: ['profile'],
+      transformResponse: (response: any): MeResponse => {
+        const apiData = response?.data ?? response ?? null;
+        if (apiData?.id) {
+          const firstName = apiData.first_name ?? '';
+          const lastName = apiData.last_name ?? '';
+          const fullName = `${firstName} ${lastName}`.trim();
+          const [derivedFirstName = '', ...restNames] = fullName
+            ? fullName.split(' ')
+            : [''];
+          const derivedLastName = restNames.join(' ').trim();
+
+          const normalizedUser: User = {
+            id: apiData.id ?? '',
+            last_name: apiData.last_name ?? derivedLastName,
+            full_name: apiData.full_name ?? apiData.fullName ?? fullName,
+            email: apiData.email ?? '',
+            first_name: apiData.first_name ?? derivedFirstName,
+            role: apiData.role ?? '',
+            provider: apiData.provider ?? apiData.login_method ?? '',
+            profile_picture: apiData.profile_picture ?? null,
+            onboarded: apiData.onboarded ?? apiData.isOnboarded ?? false,
+            deleted_at: apiData.deleted_at ?? null,
+            created_at: apiData.date_created,
+            updated_at: apiData.date_updated ?? '',
+          };
+
+          return {
+            success: true,
+            message: response?.message || '',
+            user: normalizedUser,
+            timestamp: response?.timestamp,
+          };
+        }
+        return {
+          success: false,
+          message: response?.message || '',
+          user: null,
+          timestamp: response?.timestamp,
+        };
+      },
     }),
-    updateUserProfileImage: builder.mutation<MeResponse, FormData>({
-      query: (formData) => ({
-        url: '/api/upload',
+    Onboarding: builder.mutation<OnboardingResponse, OnboardingRequestPayload>({
+      query: (data) => ({
+        url: '/account/onboarding',
+        method: 'PATCH',
+        data,
+      }),
+    }),
+    WorkSpaceSetUp: builder.mutation<
+      WorkSpaceSetUpResponse,
+      WorkSpaceSetUpRequestPayload
+    >({
+      query: (data) => ({
+        url: '/account/onboarding/complete',
         method: 'POST',
-        data: formData,
-      }),
-      invalidatesTags: ['profile'],
-    }),
-    updateUserProfile: builder.mutation<
-      UpdateProfileResponse,
-      UpdateProfileRequest
-    >({
-      query: (data) => ({
-        url: '/api/profile/update',
-        method: 'PUT',
-        data,
-      }),
-      invalidatesTags: ['profile'],
-    }),
-    deleteAccount: builder.mutation<
-      any,
-      { reason: string; deletePassword?: string }
-    >({
-      query: (data) => ({
-        url: 'api/profile',
-        method: 'DELETE',
-        data,
-      }),
-    }),
-    resetAccountPassword: builder.mutation<
-      AuthResponse,
-      ResetAccountPasswordPayload
-    >({
-      query: (data) => ({
-        url: 'api/profile/password',
-        method: 'PUT',
         data,
       }),
     }),
@@ -114,8 +105,6 @@ export const ProfileApi = createApi({
 
 export const {
   useGetMeQuery,
-  useUpdateUserProfileImageMutation,
-  useUpdateUserProfileMutation,
-  useDeleteAccountMutation,
-  useResetAccountPasswordMutation,
+  useOnboardingMutation,
+  useWorkSpaceSetUpMutation,
 } = ProfileApi;

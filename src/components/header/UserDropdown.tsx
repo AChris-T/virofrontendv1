@@ -10,6 +10,7 @@ import Image from 'next/image';
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const user = useSelector((state: RootState) => state.profile.user);
+
   function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.stopPropagation();
     setIsOpen((prev) => !prev);
@@ -25,21 +26,21 @@ export default function UserDropdown() {
         className="flex items-center  text-gray-700 dark:text-gray-400 dropdown-toggle "
       >
         <span className="mr-3 flex justify-center items-center border-1 dark:border-0 overflow-hidden rounded-full h-11 w-11 dark:hover:bg-gray-800 hover:text-gray-700 dark:hover:text-white hover:bg-gray-100">
-          {user?.avatar ? (
+          {user?.profile_picture ? (
             <Image
-              src={user?.avatar as string}
+              src={user?.profile_picture as string}
               width={40}
               height={40}
               alt="User"
               className="w-full h-full object-cover overflow-hidden rounded-full"
             />
           ) : (
-            'UserIcon'
+            'userIcon'
           )}
         </span>
 
         <span className="block mr-1 font-medium text-theme-sm">
-          {user?.full_name}
+          {user?.first_name}
         </span>
 
         <svg
@@ -69,7 +70,7 @@ export default function UserDropdown() {
       >
         <div>
           <span className="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
-            {user?.full_name}
+            {user?.first_name}
           </span>
           <span className="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">
             {user?.email}

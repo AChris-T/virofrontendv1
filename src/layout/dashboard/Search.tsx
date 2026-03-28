@@ -106,7 +106,7 @@ export default function SearchForm() {
             ))
           ) : (
             <div className="p-3">
-              <AlertMessage />
+              <AlertMessage type="info" message="No results found." />
             </div>
           )}
         </div>

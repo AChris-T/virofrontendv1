@@ -9,6 +9,7 @@ interface PasswordInputFormProps {
   register: any;
   error?: any;
   label?: string;
+  isTouched?: boolean;
 }
 
 export default function PasswordInputForm({
@@ -17,6 +18,7 @@ export default function PasswordInputForm({
   register,
   error,
   label,
+  isTouched,
 }: PasswordInputFormProps) {
   const [visible, setVisible] = useState(false);
 
@@ -36,10 +38,11 @@ export default function PasswordInputForm({
           register={register}
           error={error}
           type={visible ? 'text' : 'password'}
+          isTouched={isTouched}
         />
         <span
           onClick={toggleVisibility}
-          className="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-8"
+          className="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-6.5"
         >
           {visible ? (
             <EyeIcon className="fill-gray-500 dark:fill-gray-400" />
