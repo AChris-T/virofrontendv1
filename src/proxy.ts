@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { getSessionCookie } from '@/lib/session';
 
-export async function middleware(request: NextRequest) {
+// ✅ renamed from "middleware" to "proxy"
+export async function proxy(request: NextRequest) {
   const session = await getSessionCookie();
   const token = typeof session === 'string' ? session : session?.token;
   const role = typeof session === 'string' ? undefined : session?.role;
@@ -34,9 +35,11 @@ export async function middleware(request: NextRequest) {
     url.pathname = '/dashboard';
     return NextResponse.redirect(url);
   }
+
   return NextResponse.next();
 }
 
-export const config = {
+// ✅ renamed from "config" to "proxyConfig"
+export const proxyConfig = {
   matcher: ['/dashboard/:path*', '/signin', '/signup'],
 };
