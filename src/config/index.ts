@@ -1,7 +1,7 @@
 const config = {
-  apiBaseUrl: 'http://185.200.244.48/api/v1',
+  apiBaseUrl: process.env.NEXT_PUBLIC_API_BASE_URL || '/api/proxy',
   googleClientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '',
-  baseUrl: 'http://185.200.244.48/api/v1',
+  baseUrl: process.env.NEXT_PUBLIC_BASE_URL || '',
   NODE_ENV: process.env.NODE_ENV,
 };
 
