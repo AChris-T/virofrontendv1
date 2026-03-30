@@ -30,7 +30,37 @@ export default function MicrosoftAuth({ authType = 'signin' }) {
           avatar,
         };
         const res = await socialLogin(payload).unwrap();
-        await setSessionCookie(res.data.token);
+        // Backend response shape may vary; normalize to the same cookie schema
+        // used across the app (token/refresh_token/role/onboarded).
+        const access_token =
+          res?.access_token ??
+          res?.data?.access_token ??
+          res?.data?.token?.access_token ??
+          res?.token?.access_token ??
+          res?.data?.token;
+        const refresh_token =
+          res?.refresh_token ??
+          res?.data?.refresh_token ??
+          res?.token?.refresh_token ??
+          null;
+        const onboarded = !!(
+          res?.user?.onboarded ??
+          res?.user?.isOnboarded ??
+          res?.data?.user?.onboarded ??
+          res?.data?.user?.isOnboarded
+        );
+
+        if (access_token) {
+          await setSessionCookie({
+            token: access_token,
+            refresh_token,
+            role: 'user',
+            onboarded,
+          });
+        } else {
+          // Fallback to old behavior if only a token is returned.
+          await setSessionCookie(res?.data?.token ?? res?.token ?? res);
+        }
         const action = authType === 'signin' ? 'Login' : 'Signup';
         showToast(`${action} successful`, 'success');
         router.replace(redirectPath);

@@ -145,16 +145,20 @@ export default function VerificationEmail({ email }: any) {
         code: codeString,
       }).unwrap();
 
+      const onboarded = !!(
+        response?.user?.onboarded ?? response?.user?.isOnboarded
+      );
+
       if (response?.access_token) {
         await setSessionCookie({
           token: response.access_token,
           refresh_token: response.refresh_token,
           role: 'user',
-          onboarded: response.user.onboarded,
+          onboarded,
         });
       }
       showToast(response.detail || 'Email verified successfully!', 'success');
-      router.push('/dashboard');
+      router.replace(onboarded ? '/dashboard' : '/onboarding');
     } catch (error: any) {
       const message = error?.data?.error || 'Verification failed';
       showToast(message, 'error');

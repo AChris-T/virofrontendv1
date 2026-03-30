@@ -34,6 +34,25 @@ interface ResendCodeMutation {
   email: string;
 }
 
+interface RefreshAuthRequest {
+  refresh_token?: string | null;
+}
+
+interface RefreshAuthResponse {
+  access_token?: string;
+  refresh_token?: string;
+  onboarded?: boolean;
+  isOnboarded?: boolean;
+  user?: {
+    onboarded?: boolean;
+    isOnboarded?: boolean;
+  };
+  token?: {
+    access_token?: string;
+    refresh_token?: string;
+  };
+}
+
 export const AuthApi = createApi({
   reducerPath: 'authApi',
   baseQuery: axiosBaseQuery(),
@@ -90,6 +109,13 @@ export const AuthApi = createApi({
         data,
       }),
     }),
+    refreshAuth: builder.mutation<RefreshAuthResponse, RefreshAuthRequest>({
+      query: (data) => ({
+        url: '/account/refresh-token',
+        method: 'POST',
+        data,
+      }),
+    }),
   }),
 });
 
@@ -101,4 +127,5 @@ export const {
   useForgetPasswordMutation,
   useResetPasswordMutation,
   useResendCodeMutation,
+  useRefreshAuthMutation,
 } = AuthApi;
