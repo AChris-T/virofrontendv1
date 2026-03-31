@@ -7,73 +7,17 @@ import useToastify from '@/hooks/useToastify';
 import Loader from '@/components/ui/Loader';
 import { useWorkSpaceSetUpMutation } from '@/store/profile/profile.api';
 import type { WorkSpaceSetUpRequestPayload } from '@/store/profile/profile.api';
-import { useWorkspaceQuery } from '@/store/dashboard/dashboard.api';
+import { useGetTeamSpacesQuery } from '@/store/dashboard/dashboard.api';
+import type { WorkspaceTeamspace } from '@/store/dashboard/dashboard.api';
+import { TeamSpaceCard } from '@/components/ui/TeamsSpaceCard';
 
 type WorkspaceFormInputs = WorkSpaceSetUpRequestPayload;
-
-const TEAM_SPACE_OPTIONS = [
-  'Sales',
-  'Recruitment',
-  'Customer Support',
-  'Project Management',
-] as const;
-
-function CheckMark() {
-  return (
-    <svg width="12" height="9" viewBox="0 0 12 9" fill="none">
-      <path
-        d="M10.5 1.5L4.75 7.25L1.5 4"
-        stroke="#fff"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function TeamSpaceCard({
-  label,
-  selected,
-  onToggle,
-}: {
-  label: string;
-  selected: boolean;
-  onToggle: () => void;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onToggle}
-      className={`cursor-pointer w-full px-4 py-4 rounded-lg border transition-all flex items-center gap-3 text-left
-        ${
-          selected
-            ? 'inputgradients border-none focus:outline-none'
-            : 'border-[#5E5D5D1F] hover:border-white/20 bg-transparent'
-        }
-      `}
-    >
-      <span
-        className={`w-5 h-5 rounded-sm border flex items-center justify-center shrink-0
-          ${selected ? 'customizebutton border-[#F8F8F8]' : 'border-white/20 bg-transparent'}
-        `}
-      >
-        {selected ? <CheckMark /> : null}
-      </span>
-
-      <span className="text-white-200 text-start font-medium font-general">
-        {label}
-      </span>
-    </button>
-  );
-}
 
 export default function Workspace() {
   const router = useRouter();
   const { showToast } = useToastify();
   const [submitWorkspace, { isLoading }] = useWorkSpaceSetUpMutation();
-  const { data } = useWorkspaceQuery();
-  console.log('workspace data in invite page', data);
+  const { data: teamspaces } = useGetTeamSpacesQuery();
   const [step, setStep] = React.useState<1 | 2>(1);
 
   const {
@@ -136,13 +80,11 @@ export default function Workspace() {
 
       const res = await submitWorkspace(payload).unwrap();
       showToast(res?.message || 'Workspace setup completed', 'success');
-      router.push('/onboarding/workspace/inviteusers');
+      router.push(
+        `/onboarding/workspace/inviteusers?workspace_id=${res?.workspace_id}`
+      );
     } catch (error: any) {
-      const message =
-        error?.data?.message ||
-        error?.data?.detail ||
-        error?.data?.error ||
-        'Workspace setup failed';
+      const message = error?.data?.detail || 'Workspace setup failed';
       showToast(message, 'error');
 
       if (error?.data?.errors) {
@@ -159,7 +101,7 @@ export default function Workspace() {
   };
 
   return (
-    <div className="space-y-6 max-w-[650px] overflow-y-scroll mx-auto text-center">
+    <div className="space-y-6 max-w-[650px] overflow-y-scroll no-scrollbar mx-auto text-center">
       {step === 1 && (
         <div className="space-y-6">
           <h2 className="text-[28px] text-center text-white font-general">
@@ -208,20 +150,18 @@ export default function Workspace() {
 
           <div className="bg-[#0E0E0E] p-5 rounded-[20px] text-left">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {TEAM_SPACE_OPTIONS.map((opt) => (
+              {teamspaces?.teamspaces?.map((teamspace: WorkspaceTeamspace) => (
                 <TeamSpaceCard
-                  key={opt}
-                  label={opt}
+                  key={teamspace.id}
+                  label={teamspace.name}
                   selected={
                     typeof teamspaceNameValue === 'string' &&
-                    teamspaceNameValue === opt
+                    teamspaceNameValue === teamspace.name
                   }
-                  onToggle={() => toggleTeamSpace(opt)}
+                  onToggle={() => toggleTeamSpace(teamspace.name)}
                 />
               ))}
             </div>
-
-            {/* Hidden field to keep RHF aware of teamspace_name */}
             <input type="hidden" {...register('teamspace_name')} />
 
             {typeof (errors as any)?.teamspace_name?.message === 'string' && (

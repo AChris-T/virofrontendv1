@@ -15,6 +15,7 @@ interface OnboardingResponse {
 interface WorkSpaceSetUpResponse {
   success: boolean;
   message: string;
+  workspace_id: string;
 }
 
 export interface WorkSpaceSetUpRequestPayload {

@@ -127,7 +127,7 @@ export default function Invite() {
   };
 
   const onSkip = () => {
-    router.push('/onboarding/inviteduser');
+    router.push('/onboarding/welcome');
   };
 
   const addRow = () => {

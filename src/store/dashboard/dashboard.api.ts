@@ -2,6 +2,7 @@ import { axiosBaseQuery } from '@/lib/baseApi';
 import { createApi } from '@reduxjs/toolkit/query/react';
 
 export interface WorkspaceTeamspace {
+  id: string;
   name: string;
   slug: string;
   is_active: boolean;
@@ -16,6 +17,10 @@ export interface WorkspaceItem {
 
 export interface WorkspacesMeResponse {
   workspaces: WorkspaceItem[];
+}
+
+export interface TeamSpacesResponse {
+  teamspaces: WorkspaceTeamspace[];
 }
 
 export interface InviteWorkspaceUsersPayload {
@@ -52,7 +57,7 @@ export const DashboardApi = createApi({
         data,
       }),
     }),
-    getTeamSpaces: builder.query<WorkspacesMeResponse, void>({
+    getTeamSpaces: builder.query<TeamSpacesResponse, void>({
       query: () => ({
         url: '/account/teamspace',
         method: 'GET',
