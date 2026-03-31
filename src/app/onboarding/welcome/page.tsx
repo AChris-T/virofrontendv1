@@ -1,5 +1,4 @@
 'use client';
-
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeftIcon, MovieIcon } from '@/assets/icons';
@@ -36,8 +35,7 @@ export default function Page() {
 
       const newAccessToken =
         data?.access_token ?? data?.token?.access_token ?? data?.token;
-      const newRefreshToken =
-        data?.refresh_token ?? data?.token?.refresh_token;
+      const newRefreshToken = data?.refresh_token ?? data?.token?.refresh_token;
 
       if (newAccessToken) {
         await setSessionCookie({
