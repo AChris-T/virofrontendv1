@@ -3,7 +3,7 @@ import React from 'react';
 
 export default function page() {
   return (
-    <div className="relative">
+    <div className="relative h-full">
       <Onboard />
     </div>
   );

@@ -52,7 +52,8 @@ export default function SignUpForm() {
       const finalRedirectPath = `/email-verification?email=${emailParam}`;
       router.push(finalRedirectPath);
     } catch (error: any) {
-      if (error?.data?.errors) {
+      showToast(error?.data?.error, 'error');
+      if (error?.errors) {
         Object.entries(error.data.errors).forEach(([field, messages]) =>
           setError(field as 'first_name' | 'last_name' | 'email' | 'password', {
             type: 'server',

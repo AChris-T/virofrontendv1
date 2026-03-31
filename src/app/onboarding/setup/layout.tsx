@@ -8,8 +8,8 @@ export default function SetupLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="relative  z-1  md:p-0">
-      <div className="w-full h-full min-h-screen mt-40 mb-10 gap-[64px]  flex flex-col justify-center items-center  text-white">
+    <div className="relative overflow-y-scroll max-h-[100%] no-scrollbar  z-1  md:p-0">
+      <div className="w-full  pt-40 pb-10 gap-[64px]  flex flex-col justify-center items-center  text-white">
         <Image
           src="/images/Logo.png"
           alt="Viro"

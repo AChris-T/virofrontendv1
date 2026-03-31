@@ -10,7 +10,7 @@ export default function Onboard() {
   console.log(user);
 
   return (
-    <div className="relative mt-[100px] mb-20 justify-center  items-center gap-8 flex flex-col w-full h-full">
+    <div className="relative pt-[200px] pb-[100px] overflow-y-scroll no-scrollbar max-h-[100%]  justify-center  items-center gap-8 flex flex-col w-full h-full">
       <Image
         src="/images/Logo.png"
         alt="Viro"

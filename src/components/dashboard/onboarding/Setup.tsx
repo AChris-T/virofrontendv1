@@ -8,8 +8,11 @@ import Step2UseCase from './Step2';
 import Step3 from './Step3';
 import Step4 from './Step4';
 import Step5 from './Step5';
+import useToastify from '@/hooks/useToastify';
 
 export default function Setup() {
+  const { showToast } = useToastify();
+
   const step = useSelector((s: any) => s.onboarding?.step ?? 1);
   const role = useSelector((s: any) => s.onboarding?.role ?? null) as
     | string
@@ -56,7 +59,8 @@ export default function Setup() {
       await submitOnboarding(payload).unwrap();
       router.push('/onboarding/workspace');
     } catch (err) {
-      console.error('Onboarding submission failed', err);
+      const errorMessage = (err as any)?.data?.error || 'An error occurred';
+      showToast(errorMessage, 'error');
     }
   };
 

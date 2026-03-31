@@ -8,6 +8,14 @@ body {
   background: url('/authImages/Main.png');
   background-size: cover;
   background-position: center;
+  height: 100vh;
+}
+.welcomebg {
+  background: url('/authImages/Confet.png');
+  background-size: cover;
+  height: 65vh;
+  background-position: center;
+  z-index: 999;
 }
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;

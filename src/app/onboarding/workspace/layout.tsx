@@ -9,8 +9,8 @@ export default function WorkSpaceLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="relative  z-1 dark:bg-gray-900 md:p-0">
-      <div className="w-full h-full min-h-screen mt-20 gap-[24px]  flex flex-col justify-center items-center  text-white">
+    <div className="relative  overflow-y-scroll max-h-[100%] no-scrollbar  z-1 dark:bg-gray-900 md:p-0">
+      <div className="w-full h-full my-20 gap-[24px]  flex flex-col justify-center items-center  text-white">
         <Image
           src="/images/Logo.png"
           alt="Viro"
@@ -21,7 +21,7 @@ export default function WorkSpaceLayout({
         <div className="w-full space-y-3  md:px-10  max-w-[650px] mx-auto">
           <Stepper total={5} step={5} />
         </div>
-        <div className="">{children}</div>
+        <div className="w-full mx-auto max-w-[572px]">{children}</div>
       </div>
     </div>
   );

@@ -12,6 +12,8 @@ import './globals.css';
 import GlobalAuthHandler from '@/components/auth/GlobalAuthHandler';
 import localFont from 'next/font/local';
 
+
+
 const generalFont = localFont({
   src: [
     {

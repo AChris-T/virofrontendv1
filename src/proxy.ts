@@ -8,7 +8,7 @@ export async function proxy(request: NextRequest) {
   const token = typeof session === 'string' ? session : session?.token;
   const role = typeof session === 'string' ? undefined : session?.role;
   const onboarded =
-    typeof session === 'string' ? false : session?.onboarded ?? false;
+    typeof session === 'string' ? false : (session?.onboarded ?? false);
   const { pathname } = request.nextUrl;
   const authPages = ['/signin', '/signup'];
   const protectedRoutes = ['/dashboard', '/onboarding'];
@@ -25,8 +25,7 @@ export async function proxy(request: NextRequest) {
         : requestedRedirect;
 
     const redirectPath =
-      safeDashboardRedirect ||
-      (onboarded ? '/dashboard' : '/onboarding');
+      safeDashboardRedirect || (onboarded ? '/dashboard' : '/onboarding');
     const redirectUrl = new URL(redirectPath, request.url);
     return NextResponse.redirect(redirectUrl);
   }

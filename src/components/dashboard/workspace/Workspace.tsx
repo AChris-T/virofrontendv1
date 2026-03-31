@@ -7,6 +7,7 @@ import useToastify from '@/hooks/useToastify';
 import Loader from '@/components/ui/Loader';
 import { useWorkSpaceSetUpMutation } from '@/store/profile/profile.api';
 import type { WorkSpaceSetUpRequestPayload } from '@/store/profile/profile.api';
+import { useWorkspaceQuery } from '@/store/dashboard/dashboard.api';
 
 type WorkspaceFormInputs = WorkSpaceSetUpRequestPayload;
 
@@ -71,7 +72,8 @@ export default function Workspace() {
   const router = useRouter();
   const { showToast } = useToastify();
   const [submitWorkspace, { isLoading }] = useWorkSpaceSetUpMutation();
-
+  const { data } = useWorkspaceQuery();
+  console.log('workspace data in invite page', data);
   const [step, setStep] = React.useState<1 | 2>(1);
 
   const {
@@ -157,7 +159,7 @@ export default function Workspace() {
   };
 
   return (
-    <div className="space-y-6 max-w-[650px] mx-auto text-center">
+    <div className="space-y-6 max-w-[650px] overflow-y-scroll mx-auto text-center">
       {step === 1 && (
         <div className="space-y-6">
           <h2 className="text-[28px] text-center text-white font-general">
