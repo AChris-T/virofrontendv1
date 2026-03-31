@@ -2,11 +2,10 @@
 
 import React from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import {
   useGetTeamSpacesQuery,
   useInviteWorkspaceUsersMutation,
-  useWorkspaceQuery,
 } from '@/store/dashboard/dashboard.api';
 import useToastify from '@/hooks/useToastify';
 import Loader from '@/components/ui/Loader';
@@ -23,24 +22,20 @@ type InviteFormValues = {
 
 export default function Invite() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { showToast } = useToastify();
-  const { data, isLoading, isError } = useWorkspaceQuery();
   const [inviteUsers, { isLoading: isInviting }] =
     useInviteWorkspaceUsersMutation();
   const { data: teamspacesData } = useGetTeamSpacesQuery();
-  console.log('teamspacesData', teamspacesData);
-  const workspace = data?.workspaces?.[0];
-  const workspaceId = workspace?.id ?? '';
-  const teamspaceList = [
-    { slug: 'viewer', name: 'Viewer' },
-    { slug: 'editor', name: 'Editor' },
-  ];
-  const defaultSlug = teamspaceList[0]?.slug ?? '';
+
+  const workspaceId = searchParams.get('workspace_id') ?? '';
+  const teamspaceList = teamspacesData?.teamspaces ?? [];
+  const defaultTeamspaceId = teamspaceList[0]?.id ?? '';
 
   const { register, control, handleSubmit, setValue, getValues } =
     useForm<InviteFormValues>({
       defaultValues: {
-        users: [{ email: '', teamspace: '' }],
+        users: [{ email: '', teamspace: defaultTeamspaceId }],
       },
     });
 
@@ -56,18 +51,18 @@ export default function Invite() {
   }, [workspaceId]);
 
   React.useEffect(() => {
-    if (!defaultSlug || teamspaceSeededRef.current) return;
+    if (!defaultTeamspaceId || teamspaceSeededRef.current) return;
     teamspaceSeededRef.current = true;
     const rows = getValues('users');
     rows.forEach((_, i) => {
       const current = getValues(`users.${i}.teamspace`);
       if (!current) {
-        setValue(`users.${i}.teamspace`, defaultSlug, {
+        setValue(`users.${i}.teamspace`, defaultTeamspaceId, {
           shouldDirty: false,
         });
       }
     });
-  }, [defaultSlug, getValues, setValue]);
+  }, [defaultTeamspaceId, getValues, setValue]);
 
   const onSubmit = async (formData: InviteFormValues) => {
     if (!workspaceId) {
@@ -133,22 +128,22 @@ export default function Invite() {
   const addRow = () => {
     append({
       email: '',
-      teamspace: defaultSlug || teamspaceList[0]?.slug || '',
+      teamspace: defaultTeamspaceId || teamspaceList[0]?.id || '',
     });
   };
 
-  if (isLoading) {
+  if (!workspaceId) {
     return (
-      <div className="flex items-center justify-center min-h-[200px] w-full">
-        <Loader />
+      <div className="max-w-[650px] mx-auto text-center text-white/70 font-general text-sm px-4">
+        Invalid workspace. Please try again.
       </div>
     );
   }
 
-  if (isError || !workspace) {
+  if (!teamspaceList || teamspaceList.length === 0) {
     return (
-      <div className="max-w-[650px] mx-auto text-center text-white/70 font-general text-sm px-4">
-        Could not load workspace. Refresh the page or try again later.
+      <div className="flex items-center justify-center min-h-[200px] w-full">
+        <Loader />
       </div>
     );
   }
@@ -190,8 +185,8 @@ export default function Invite() {
                   ) : (
                     teamspaceList.map((ts) => (
                       <option
-                        key={ts.slug}
-                        value={ts.slug}
+                        key={ts.id}
+                        value={ts.id}
                         className="bg-[#0E0E0E] text-white"
                       >
                         {ts.name}

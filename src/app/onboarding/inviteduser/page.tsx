@@ -2,11 +2,10 @@ import { InvitedUserIcon } from '@/assets/icons';
 import InviteList from '@/components/dashboard/workspace/inviteusers/InviteList';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
 
 export default function page() {
   return (
-    <div className="flex justify-center overflow-y-scroll max-h-[100%] pt-56 no-scrollbar pb-20 flex-col items-center space-y-12 h-full">
+    <div className="flex  justify-center overflow-y-scroll max-h-[100%] pt-56 no-scrollbar pb-20 flex-col items-center space-y-12 h-full">
       <div className="space-y-16 flex flex-col justify-center items-center">
         <Image
           src="/images/Logo.png"
@@ -19,7 +18,7 @@ export default function page() {
           You can always add more in settings{' '}
         </h2>
       </div>
-      <div className="max-w-[800px]  space-y-4 font-general text-start  w-full">
+      <div className="max-w-[800px] space-y-4 font-general text-start  w-full">
         <div className="flex justify-between">
           <h3 className="text-lg font-medium ">Users</h3>
           <Link
