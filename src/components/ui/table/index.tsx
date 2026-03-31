@@ -33,18 +33,18 @@ const TableContainer: React.FC<TableContainerProps> = ({
 }) => {
   return (
     <div
-      className={`w-full overflow-x-auto rounded-[16px] border border-[#202124] bg-[#0B0B0B] ${className}`}
+      className={`w-full max-w-full min-w-0 overflow-hidden rounded-[16px] border border-[#202124] bg-[#0B0B0B] ${className}`}
     >
-      {children}
+      <div className="w-full max-w-full overflow-x-auto overscroll-x-contain">
+        {children}
+      </div>
     </div>
   );
 };
 
 const Table: React.FC<TableProps> = ({ children, className = '' }) => {
   return (
-    <table
-      className={`w-full min-w-[720px] border-collapse  border-spacing-0 ${className}`}
-    >
+    <table className={`w-full border-collapse border-spacing-0 ${className}`}>
       {children}
     </table>
   );
@@ -55,7 +55,9 @@ const TableHeader: React.FC<TableHeaderProps> = ({
   className = '',
 }) => {
   return (
-    <thead className={`text-white/55 text-[12px] font-general ${className}`}>
+    <thead
+      className={`text-white/55 text-[10px] sm:text-[12px] font-general ${className}`}
+    >
       {children}
     </thead>
   );
@@ -81,7 +83,7 @@ const TableCell: React.FC<TableCellProps> = ({
   const CellTag = isHeader ? 'th' : 'td';
   return (
     <CellTag
-      className={`px-5 py-4 align-middle ${isHeader ? 'text-xs font-normal font-general text-left' : 'text-white/80 text-sm'} ${className}`}
+      className={`px-2 sm:px-5 py-2 sm:py-4 align-middle text-xs sm:text-sm ${isHeader ? 'font-normal font-general text-left text-white/55' : 'text-white/80'} ${className}`}
     >
       {children}
     </CellTag>

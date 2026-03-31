@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 export default function page() {
   return (
-    <div className="flex  justify-center overflow-y-scroll max-h-[100%] pt-56 no-scrollbar pb-20 flex-col items-center space-y-12 h-full">
+    <div className="flex justify-center overflow-y-scroll max-h-[100%] pt-[400px] no-scrollbar pb-20 flex-col items-center space-y-12 w-full min-w-0 overflow-x-hidden">
       <div className="space-y-16 flex flex-col justify-center items-center">
         <Image
           src="/images/Logo.png"
@@ -18,7 +18,7 @@ export default function page() {
           You can always add more in settings{' '}
         </h2>
       </div>
-      <div className="max-w-[800px] space-y-4 font-general text-start  w-full">
+      <div className="max-w-[800px] mx-auto space-y-4 font-general text-start w-full min-w-0">
         <div className="flex justify-between">
           <h3 className="text-lg font-medium ">Users</h3>
           <Link
@@ -28,7 +28,9 @@ export default function page() {
             <InvitedUserIcon /> invite user
           </Link>
         </div>
-        <InviteList />
+        <div className="w-full min-w-0">
+          <InviteList />
+        </div>
       </div>
     </div>
   );

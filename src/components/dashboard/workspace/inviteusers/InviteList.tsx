@@ -74,7 +74,7 @@ export default function InviteList() {
   const paged = rows.slice((page - 1) * pageSize, page * pageSize);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 w-full max-w-full">
       <TableContainer>
         <Table>
           <TableHeader>

@@ -13,7 +13,6 @@ export default function Step1Role() {
   const options = ['Sales Professional', 'Other'];
 
   useEffect(() => {
-    // Reset typed value whenever they switch away from "Other".
     if (role !== 'Other') setOtherRole('');
   }, [role]);
 

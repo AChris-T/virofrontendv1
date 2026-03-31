@@ -16,8 +16,9 @@ export default function GlobalAuthHandler() {
   const user = useSelector((state: RootState) => state.profile.user);
   const isDashboardRoute =
     pathname.startsWith('/dashboard') || pathname.startsWith('/onboarding');
+  const isWelcomePage = pathname.includes('/onboarding/welcome');
   const { data, isFetching } = useGetMeQuery(undefined, {
-    skip: !isDashboardRoute,
+    skip: !isDashboardRoute || isWelcomePage,
   });
 
   useEffect(() => {
