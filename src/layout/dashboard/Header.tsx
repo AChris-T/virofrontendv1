@@ -1,15 +1,42 @@
-import Link from 'next/link';
+// context/HeaderContext.tsx
+'use client';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from 'react';
 
-interface HeaderProps {
-  Heading: string;
-  link?: string;
-}
-export default function Header({ Heading, link = '#' }: HeaderProps) {
+type HeaderContextType = {
+  headerContent: ReactNode;
+  setHeaderContent: (content: ReactNode) => void;
+};
+
+const HeaderContext = createContext<HeaderContextType>({
+  headerContent: null,
+  setHeaderContent: () => {},
+});
+
+export const HeaderProvider = ({ children }: { children: ReactNode }) => {
+  const [headerContent, setHeaderContent] = useState<ReactNode>(null);
   return (
-    <div className="font-lora text-[20px] lg:text-[28px] font-semibold dark:text-white text-gray-800">
-      <Link href={link}>
-        <h3>{Heading}</h3>
-      </Link>
-    </div>
+    <HeaderContext.Provider value={{ headerContent, setHeaderContent }}>
+      {children}
+    </HeaderContext.Provider>
   );
-}
+};
+
+export const useHeader = () => useContext(HeaderContext);
+
+// ✅ The reusable slot component
+export const HeaderSlot = ({ children }: { children: ReactNode }) => {
+  const { setHeaderContent } = useHeader();
+
+  useEffect(() => {
+    setHeaderContent(children);
+    return () => setHeaderContent(null);
+  }, []);
+
+  return null;
+};

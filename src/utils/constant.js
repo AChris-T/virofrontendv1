@@ -10,6 +10,7 @@ export const NAV_LINKS = [
     ],
   },
 ];
+
 export const loadingIndicatorProperties = {
   color: '#FE6D00',
   height: 3.5,

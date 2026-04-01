@@ -21,28 +21,34 @@ export default function NotificationDropdown() {
   return (
     <div className="relative">
       <button
-        className="relative dropdown-toggle flex items-center justify-center text-gray-500 transition-colors bg-white border border-gray-200 rounded-full  h-11 w-11  dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 hover:text-gray-700 dark:hover:text-white hover:bg-gray-100"
+        className="relative dropdown-toggle flex items-center justify-center text-gray-500 transition-colors "
         onClick={handleClick}
       >
         <span
-          className={`absolute right-0 top-0.5 z-10 h-2 w-2 rounded-full bg-orange-400 ${
+          className={`absolute right-0 top-0.5 z-10 h-2 w-2 rounded-full bg-[linear-gradient(90deg,#3CF239_0%,#DDF239_100%)] ${
             !notifying ? 'hidden' : 'flex'
           }`}
         >
-          <span className="absolute inline-flex w-full h-full bg-orange-400 rounded-full opacity-75 animate-ping"></span>
+          <span className="absolute inline-flex w-full h-full bg-[linear-gradient(90deg,#3CF239_0%,#DDF239_100%)] rounded-full opacity-75 animate-ping"></span>
         </span>
         <svg
-          className="fill-current"
-          width="20"
-          height="20"
-          viewBox="0 0 20 20"
           xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
         >
           <path
-            fillRule="evenodd"
-            clipRule="evenodd"
-            d="M10.75 2.29248C10.75 1.87827 10.4143 1.54248 10 1.54248C9.58583 1.54248 9.25004 1.87827 9.25004 2.29248V2.83613C6.08266 3.20733 3.62504 5.9004 3.62504 9.16748V14.4591H3.33337C2.91916 14.4591 2.58337 14.7949 2.58337 15.2091C2.58337 15.6234 2.91916 15.9591 3.33337 15.9591H4.37504H15.625H16.6667C17.0809 15.9591 17.4167 15.6234 17.4167 15.2091C17.4167 14.7949 17.0809 14.4591 16.6667 14.4591H16.375V9.16748C16.375 5.9004 13.9174 3.20733 10.75 2.83613V2.29248ZM14.875 14.4591V9.16748C14.875 6.47509 12.6924 4.29248 10 4.29248C7.30765 4.29248 5.12504 6.47509 5.12504 9.16748V14.4591H14.875ZM8.00004 17.7085C8.00004 18.1228 8.33583 18.4585 8.75004 18.4585H11.25C11.6643 18.4585 12 18.1228 12 17.7085C12 17.2943 11.6643 16.9585 11.25 16.9585H8.75004C8.33583 16.9585 8.00004 17.2943 8.00004 17.7085Z"
-            fill="currentColor"
+            d="M9 21H15"
+            stroke="#D9D9D9"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M5.24939 9.75C5.24939 7.95979 5.96055 6.2429 7.22642 4.97703C8.49229 3.71116 10.2092 3 11.9994 3C13.7896 3 15.5065 3.71116 16.7724 4.97703C18.0382 6.2429 18.7494 7.95979 18.7494 9.75C18.7494 13.1081 19.5275 15.8063 20.1463 16.875C20.212 16.9888 20.2466 17.1179 20.2468 17.2493C20.2469 17.3808 20.2124 17.5099 20.1469 17.6239C20.0814 17.7378 19.9871 17.8325 19.8735 17.8985C19.7598 17.9645 19.6308 17.9995 19.4994 18H4.49939C4.36813 17.9992 4.23936 17.964 4.12598 17.8978C4.01259 17.8317 3.91855 17.7369 3.85326 17.6231C3.78797 17.5092 3.75371 17.3801 3.75391 17.2489C3.75411 17.1176 3.78876 16.9887 3.85439 16.875C4.47221 15.8063 5.24939 13.1072 5.24939 9.75Z"
+            stroke="#D9D9D9"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
         </svg>
       </button>
