@@ -46,7 +46,7 @@ export default function SignInForm() {
       const finalRedirectPath = `/email-verification?email=${emailParam}`;
       router.push(finalRedirectPath);
     } catch (error: any) {
-      const message = error?.data?.error || error?.error || '';
+      const message = error?.data?.detail || error?.detail || '';
       showToast(message || 'Network Error', 'error');
     }
   };

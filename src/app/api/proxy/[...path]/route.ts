@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const API_BASE_URL = 'http://185.200.244.48/api/v1';
+const API_BASE_URL = 'https://api.dev.meetviro.com';
 
 async function handler(request: NextRequest) {
-  // Extract the path after /api/proxy/
   const path = request.nextUrl.pathname.replace('/api/proxy', '');
   const search = request.nextUrl.search;
   const url = `${API_BASE_URL}${path}${search}`;
@@ -13,7 +12,6 @@ async function handler(request: NextRequest) {
     method: request.method,
     headers: {
       'Content-Type': 'application/json',
-      // Forward auth token if present
       ...(request.headers.get('Authorization')
         ? { Authorization: request.headers.get('Authorization')! }
         : {}),
