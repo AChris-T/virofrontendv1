@@ -2,16 +2,11 @@
 
 import React, { useState } from 'react';
 import { Dropdown } from '../ui/dropdown/Dropdown';
-import { notifications as allNotifications } from '../../utils/data';
+import { MarkedNotificationIcon } from '@/assets/icons';
 
 export default function NotificationDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const [notifying, setNotifying] = useState(true);
-  const [activeTab, setActiveTab] = useState('all');
-
-  const filteredNotifications = allNotifications.filter((n) =>
-    activeTab === 'all' ? true : activeTab === 'read' ? n.read : !n.read
-  );
 
   const handleClick = () => {
     setIsOpen(!isOpen);
@@ -55,85 +50,21 @@ export default function NotificationDropdown() {
       <Dropdown
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
-        className="absolute mt-4 w-[380px] max-h-[396px] overflow-y-auto rounded-3xl border border-gray-200 bg-white p-4 shadow-lg
-        sm:left-1/2 -translate-x-1/2
-        lg:left-auto lg:right-0 lg:translate-x-0"
+        className="absolute mt-4 w-[580px] max-h-[396px] overflow-y-auto no-scrollbar  border border-gray-200 bg-[#232225]  shadow-lg"
       >
-        <div className="mb-2 flex items-center justify-between">
-          <h2 className="text-md font-open-sans font-semibold text-black uppercase">
+        <div className=" border-[#404040] border-b flex items-center justify-between p-4">
+          <h2 className="text-lg font-general font-medium text-[#fff] ">
             Notifications
           </h2>
-          <button className="flex items-center text-sm text-gray-500 hover:text-black">
-            Refresh
+          <button className="flex items-center gap-2 font-general text-[15px] text-[#8C8C8C] ">
+            <MarkedNotificationIcon />
+            Mark as read
           </button>
         </div>
 
-        <div className="flex items-center gap-6 justify-between border-b border-gray-200 px-6 mt-4 mb-3 relative">
-          {['all', 'read', 'unread'].map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`relative text-sm font-semibold capitalize font-open-sans pb-2 ${
-                activeTab === tab
-                  ? "text-black after:content-[''] after:absolute after:bottom-[-1px] after:left-0 after:h-[3px] after:w-full after:bg-black"
-                  : 'text-gray-500 hover:text-black'
-              }`}
-            >
-              {tab}
-            </button>
-          ))}
+        <div className="flex items-center text-white gap-6 p-4 justify-between bg-[#202124]  relative">
+          No Notification yet
         </div>
-        <ul className="flex flex-col gap-3">
-          {filteredNotifications.length === 0 ? (
-            <li className="text-center text-gray-500 text-sm">
-              No notifications
-            </li>
-          ) : (
-            filteredNotifications.map((item, idx) => {
-              const isOld =
-                item.time.includes('day') || item.time.includes('week');
-
-              return (
-                <li
-                  key={idx}
-                  className={`flex justify-between items-start p-3 rounded-xl transition ${
-                    isOld
-                      ? 'bg-gray-50 text-gray-400'
-                      : 'bg-white text-gray-800'
-                  }`}
-                >
-                  <div className={`p-2 rounded-full bg-gray-300`}>Noticon</div>
-
-                  <div className="ml-3 flex-1">
-                    <h3
-                      className={`font-semibold text-[14px] font-open-sans ${
-                        isOld ? 'text-gray-500' : 'text-gray-800'
-                      }`}
-                    >
-                      {item.title}
-                    </h3>
-                    <p
-                      className={`text-[12px] font-open-sans ${
-                        isOld ? 'text-gray-400' : 'text-gray-600'
-                      }`}
-                    >
-                      {item.description}
-                    </p>
-                  </div>
-
-                  <span
-                    className={`text-xs whitespace-nowrap ${isOld ? 'text-gray-400' : 'text-gray-700'}`}
-                  >
-                    {item.time}
-                  </span>
-                </li>
-              );
-            })
-          )}
-        </ul>
-        <button className="mt-4 w-full text-center text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg py-2 hover:bg-gray-100">
-          View All Notifications
-        </button>
       </Dropdown>
     </div>
   );

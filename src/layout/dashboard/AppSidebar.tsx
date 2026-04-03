@@ -30,7 +30,6 @@ type NavItem = {
 
 const AppSidebar: React.FC = () => {
   const user = useSelector((state: RootState) => state.profile.user);
-  console.log('User in AppSidebar:', user);
   const {
     isExpanded,
     isMobileOpen,
@@ -97,7 +96,7 @@ const AppSidebar: React.FC = () => {
               className={` group  font-general flex items-center gap-2 rounded-lg px-4 py-3 transition-colors ${
                 active
                   ? 'font-medium text-sm bg-green-100 text-white'
-                  : 'hover:bg-gray-25 text-white-100'
+                  : 'hover:bg-gray-25 text-sm text-white-100'
               }`}
             >
               <span>{item.icon}</span>

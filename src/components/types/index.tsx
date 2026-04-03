@@ -25,3 +25,15 @@ export type SigninFormInputs = {
   email: string;
   password: string;
 };
+
+export type CalendarViewMode = 'day' | 'week' | 'month';
+
+export type CalendarEventAccent = 'green' | 'blue' | 'yellow';
+
+export type CalendarEventItem = {
+  id: string;
+  title: string;
+  start: Date;
+  end: Date;
+  accent?: CalendarEventAccent;
+};

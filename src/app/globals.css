@@ -173,6 +173,50 @@ body {
   pointer-events: none;
   z-index: 1;
 }
+.gradient-border {
+  position: relative;
+  background-clip: padding-box;
+}
+
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(60, 242, 57, 0.2) 0%,
+    rgba(221, 242, 57, 0.2) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+/* globals.css */
+.gradient-border {
+  position: relative;
+}
+
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.2px;
+  background: linear-gradient(
+    90deg,
+    rgba(60, 242, 57, 0.2) 0%,
+    rgba(221, 242, 57, 0.2) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
 
 @theme {
   --font-outfit: 'Outfit', sans-serif;
@@ -254,10 +298,87 @@ body {
   --z-index-1: 1;
   --z-index-9: 9;
   --z-index-99: 99;
-  --z-index-999: 999;
-  --z-index-9999: 9999;
-  --z-index-99999: 99999;
-  --z-index-999999: 999999;
+}
+
+/* Custom styles for react-day-picker */
+.rdp {
+  --rdp-cell-size: 40px;
+  --rdp-accent-color: #6f9003; /* Selected day background */
+  --rdp-background-color: #0f0f10; /* Calendar background */
+  --rdp-outline-selected: 2px solid rgba(0, 0, 0, 0.75);
+}
+
+.rdp-months {
+  background-color: black;
+  border-radius: 8px;
+}
+
+.rdp-month {
+  background-color: #0f0f10;
+  color: #f8f8f8;
+}
+
+.rdp-caption {
+  color: #f8f8f8;
+  font-weight: 100;
+  background: red;
+}
+
+.rdp-nav {
+  color: #f8f8f8;
+}
+
+.rdp-nav_button {
+  background-color: #202124;
+  color: #f8f8f8;
+  border: 1px solid #595959;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+/* Arrow color customization */
+
+.rdp-head_cell {
+  color: #bfbfbf;
+  font-weight: 500;
+}
+
+.rdp-day {
+  color: #f8f8f8;
+  border-radius: 4px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.rdp-day:hover {
+  background-color: #0552;
+  color: #f8f8f8;
+}
+
+.rdp-day_today {
+  background-color: #202124;
+  color: #f8f8f8;
+}
+
+.rdp-day_outside {
+  color: #595959;
+}
+
+.rdp-day_disabled {
+  color: #595959;
+  cursor: not-allowed;
+}
+
+.select-option-bg {
+  background: linear-gradient(
+    90deg,
+    rgba(60, 242, 57, 0.06) 0%,
+    rgba(221, 242, 57, 0.06) 100%
+  );
+}
+
+.select-option:hover {
+  border-left: 2px solid rgba(60, 242, 57, 0.4);
+  padding-left: 14px;
 }
 
 /*

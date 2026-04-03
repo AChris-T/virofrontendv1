@@ -1,4 +1,5 @@
 'use client';
+import { CloseIcon } from '@/assets/icons';
 import React, { useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 
@@ -6,6 +7,7 @@ interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   className?: string;
+  Title?: string;
   children: React.ReactNode;
   showCloseButton?: boolean;
   isFullscreen?: boolean;
@@ -14,6 +16,7 @@ interface ModalProps {
 export const Modal: React.FC<ModalProps> = ({
   isOpen,
   onClose,
+  Title,
   children,
   className,
   showCloseButton = true, // Default to true for backwards compatibility
@@ -52,30 +55,30 @@ export const Modal: React.FC<ModalProps> = ({
   if (!isOpen) return null;
 
   const contentClasses = isFullscreen
-    ? 'w-full h-full mx-auto'
-    : 'relative w-full h-full rounded-3xl mx-auto  dark:bg-gray-900';
+    ? 'w-full  mx-auto'
+    : 'relative w-full  rounded-[15px] mx-auto  dark:bg-gray-900';
 
   return createPortal(
     <div className="fixed inset-0 flex items-center justify-center overflow-y-auto modal z-99999">
       {!isFullscreen && (
         <div
-          className="fixed inset-0 h-full w-full bg-gray-400/50 backdrop-blur-xs"
+          className="fixed inset-0 h-full w-full bg-[#0F0F0FE0] backdrop-blur-xs"
           onClick={onClose}
         ></div>
       )}
       <div
         ref={modalRef}
-        className={`${contentClasses}  ${className}`}
+        className={`${contentClasses}  ${className} bg-[#060606] flex flex-col `}
         onClick={(e) => e.stopPropagation()}
       >
-        {showCloseButton && (
-          <button
-            onClick={onClose}
-            className="absolute right-3 top-3 z-999 flex h-9.5 w-9.5 items-center justify-center rounded-full bg-gray-200 text-gray-700 transition-colors hover:bg-gray-200 hover:text-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white sm:right-6 sm:top-6 sm:h-11 sm:w-11"
-          >
-            CloseIcon
-          </button>
-        )}
+        <div className="flex items-center border-b border-[#0F0F0F] justify-between w-full relative px-4 py-3">
+          <h3 className="text-base font-general text-white-100 ">{Title}</h3>
+          {showCloseButton && (
+            <button onClick={onClose} className=" ">
+              <CloseIcon fill={'#BFBFBF'} />
+            </button>
+          )}
+        </div>
         <div>{children}</div>
       </div>
     </div>,
