@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const API_BASE_URL = 'https://api.dev.meetviro.com';
+const API_BASE_URL = 'https://api.dev.meetviro.com/api/v1';
 
 async function handler(request: NextRequest) {
   const path = request.nextUrl.pathname.replace('/api/proxy', '');

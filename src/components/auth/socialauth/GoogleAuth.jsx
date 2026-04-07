@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useSocialLoginMutation } from '@/store/auth/auth.api';
 import useToastify from '@/hooks/useToastify';
@@ -15,6 +15,8 @@ export default function GoogleAuth({ authType = 'signin' }) {
   const { showToast } = useToastify();
   const router = useRouter();
   const [isGoogleReady, setIsGoogleReady] = useState(false);
+  const googleInitializedRef = useRef(false);
+  const containerRef = useRef(null);
 
   const handleCredentialResponse = async (response) => {
     try {
@@ -48,8 +50,23 @@ export default function GoogleAuth({ authType = 'signin' }) {
 
   useEffect(() => {
     const loadGoogleScript = () => {
-      if (window.google) {
-        initializeGoogleSignIn();
+      // Check if Google SDK is already loaded
+      if (window.google && googleInitializedRef.current) {
+        return;
+      }
+
+      // Check if script is already in the document
+      if (
+        document.querySelector(
+          'script[src="https://accounts.google.com/gsi/client"]'
+        )
+      ) {
+        const checkGoogle = setInterval(() => {
+          if (window.google) {
+            clearInterval(checkGoogle);
+            initializeGoogleSignIn();
+          }
+        }, 100);
         return;
       }
 
@@ -58,54 +75,96 @@ export default function GoogleAuth({ authType = 'signin' }) {
       script.async = true;
       script.defer = true;
       script.onload = initializeGoogleSignIn;
+      script.onerror = () => {
+        showToast('Failed to load Google Sign-In', 'error');
+      };
       document.head.appendChild(script);
     };
 
     const initializeGoogleSignIn = () => {
-      if (!window.google) return;
+      if (googleInitializedRef.current || !window.google) return;
 
-      window.google.accounts.id.initialize({
-        client_id: config.googleClientId,
-        callback: handleCredentialResponse,
-        use_fedcm_for_prompt: true,
-      });
+      googleInitializedRef.current = true;
 
-      window.google.accounts.id.renderButton(
-        document.getElementById('google-btn-container'),
-        { theme: 'outline', size: 'large', width: '100%' }
-      );
+      try {
+        window.google.accounts.id.initialize({
+          client_id: config.googleClientId,
+          callback: handleCredentialResponse,
+          use_fedcm_for_prompt: true,
+        });
 
-      setIsGoogleReady(true);
+        // Render button to hidden container
+        if (
+          containerRef.current &&
+          containerRef.current.children.length === 0
+        ) {
+          window.google.accounts.id.renderButton(containerRef.current, {
+            theme: 'outline',
+            size: 'large',
+            width: '100%',
+          });
+        }
+
+        // Give the button time to fully render
+        setTimeout(() => {
+          setIsGoogleReady(true);
+        }, 500);
+      } catch (error) {
+        console.error('Error initializing Google Sign-In:', error);
+        showToast('Failed to initialize Google Sign-In', 'error');
+      }
     };
 
     loadGoogleScript();
 
     return () => {
-      if (window.google) {
-        window.google.accounts.id.cancel();
-      }
+      // Cleanup is handled by Google SDK
     };
-  }, [config.googleClientId]);
+  }, [config.googleClientId, showToast]);
 
   const handleGoogleSignIn = () => {
-    const googleBtn = document
-      .getElementById('google-btn-container')
-      ?.querySelector('div[role=button]');
-
-    if (!googleBtn) {
+    if (!isGoogleReady || !window.google) {
       showToast('Google sign-in is not ready yet', 'error');
       return;
     }
 
-    googleBtn.click();
+    try {
+      // Try to find and click the hidden button
+      const googleBtn =
+        containerRef.current?.querySelector('div[role="button"]');
+
+      if (googleBtn) {
+        googleBtn.click();
+      } else {
+        // Fallback: trigger the One Tap UI
+        window.google.accounts.id.prompt((notification) => {
+          if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+            // If One Tap didn't show, try clicking the button again
+            setTimeout(() => {
+              const btn =
+                containerRef.current?.querySelector('div[role="button"]');
+              if (btn) {
+                btn.click();
+              } else {
+                showToast('Google sign-in is not ready yet', 'error');
+              }
+            }, 300);
+          }
+        });
+      }
+    } catch (error) {
+      console.error('Error triggering Google Sign-In:', error);
+      showToast('Failed to trigger Google sign-in', 'error');
+    }
   };
 
   return (
     <div className="relative w-full">
       {/* Hidden Google button — handles the actual auth */}
       <div
+        ref={containerRef}
         id="google-btn-container"
-        className="absolute opacity-0 pointer-events-none"
+        className="absolute opacity-0 pointer-events-none h-0 w-0"
       />
 
       {/* Custom styled button */}
@@ -113,7 +172,7 @@ export default function GoogleAuth({ authType = 'signin' }) {
         type="button"
         onClick={handleGoogleSignIn}
         disabled={isLoading || !isGoogleReady}
-        className="flex w-full gradient-inputbox text-white-200 text-sm leading-5 items-center justify-center gap-2 rounded-lg py-3 px-[18px] transition-colors"
+        className="flex w-full gradient-inputbox text-white-200 text-sm leading-5 items-center justify-center gap-2 rounded-lg py-3 px-[18px] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <h3 className="flex items-center gap-3 ml-4">
           {isLoading ? <Loader /> : <GoogleIcon />}
