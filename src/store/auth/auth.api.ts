@@ -5,6 +5,25 @@ interface AuthResponse {
   success: boolean;
   detail: string;
 }
+interface Workspace {
+  id: string;
+  name: string;
+}
+interface Inviter {
+  id: string;
+  first_name: string;
+}
+
+interface InviteResponse {
+  success: boolean;
+  detail: string;
+  workspace: Workspace;
+  inviter: Inviter;
+}
+
+interface InviteRequest {
+  id: string;
+}
 interface SocialLoginPayload {
   id_token: string;
   provider: 'google';
@@ -12,6 +31,11 @@ interface SocialLoginPayload {
 interface LoginRequest {
   email: string;
   password: string;
+}
+interface AcceptRequest {
+  success: boolean;
+  detail: string;
+  id: string;
 }
 interface VerifyEmailResquest {
   email: string;
@@ -74,6 +98,18 @@ export const AuthApi = createApi({
         data,
       }),
     }),
+    InvitedUser: builder.query<InviteResponse, InviteRequest>({
+      query: ({ id }) => ({
+        url: `account/invitations/${id}`,
+        method: 'GET',
+      }),
+    }),
+    acceptInvite: builder.mutation<InviteResponse, AcceptRequest>({
+      query: ({ id }) => ({
+        url: `/account/invitations/${id}/accept`,
+        method: 'POST',
+      }),
+    }),
     register: builder.mutation<AuthResponse, RegisterRequest>({
       query: (data) => ({
         url: '/account/signup',
@@ -122,7 +158,9 @@ export const AuthApi = createApi({
 export const {
   useSocialLoginMutation,
   useLoginMutation,
+  useAcceptInviteMutation,
   useRegisterMutation,
+  useInvitedUserQuery,
   useVerifyEmailMutation,
   useForgetPasswordMutation,
   useResetPasswordMutation,
