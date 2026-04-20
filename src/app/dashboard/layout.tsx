@@ -29,7 +29,7 @@ export default function AdminLayout({
           className={`flex-1 transition-all  duration-300 ease-in-out ${mainContentMargin}`}
         >
           <AppHeader />
-          <div className="">{children}</div>
+          <div className=" ">{children}</div>
         </div>
       </HeaderProvider>
     </div>

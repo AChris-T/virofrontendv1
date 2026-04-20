@@ -24,6 +24,7 @@ type Props = {
   events: CalendarEventItem[];
   showChrome?: boolean;
   view: 'day' | 'week';
+  onEventDetails?: (event: CalendarEventItem) => void;
 };
 
 export default function TimeGrid({
@@ -31,6 +32,7 @@ export default function TimeGrid({
   view,
   events,
   showChrome = true,
+  onEventDetails,
 }: Props) {
   const gridHeight = HOURS_IN_GRID * SLOT_HEIGHT_PX;
 
@@ -42,7 +44,7 @@ export default function TimeGrid({
     const endMin = minutesSinceGridStart(e.end);
     const durMin = Math.max(endMin - startMin, 15);
     const top = clamp((startMin / 60) * SLOT_HEIGHT_PX, 0, gridHeight);
-    const height = clamp((durMin / 60) * SLOT_HEIGHT_PX, 28, gridHeight - top);
+    const height = clamp((durMin / 60) * SLOT_HEIGHT_PX, 38, gridHeight - top);
     return { top, height };
   };
 
@@ -97,8 +99,9 @@ export default function TimeGrid({
                     const accent = e.accent ?? 'green';
                     return (
                       <div
-                        key={e.id}
-                        className="absolute left-1 right-1 rounded-md overflow-hidden bg-[#1A1A1A] border border-[#2A2A2A] z-10"
+                        key={e.id}  
+                                                      onClick={() => onEventDetails?.(e)}
+                        className="absolute left-1  right-1 rounded-md overflow-hidden bg-[#1A1A1A] border border-[#2A2A2A] z-10"
                         style={{ top, height }}
                       >
                         <div className="flex h-full">
@@ -112,6 +115,7 @@ export default function TimeGrid({
                             <p className="text-[9px] text-white/45 truncate">
                               {formatEventTimeRange(e.start, e.end)}
                             </p>
+     
                           </div>
                         </div>
                       </div>

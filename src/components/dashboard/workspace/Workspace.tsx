@@ -10,6 +10,7 @@ import type { WorkSpaceSetUpRequestPayload } from '@/store/profile/profile.api';
 import { useGetTeamSpacesQuery } from '@/store/dashboard/dashboard.api';
 import type { WorkspaceTeamspace } from '@/store/dashboard/dashboard.api';
 import { TeamSpaceCard } from '@/components/ui/TeamsSpaceCard';
+import { useWorkspace } from '@/context/WorkspaceContext';
 
 type WorkspaceFormInputs = WorkSpaceSetUpRequestPayload;
 
@@ -18,6 +19,7 @@ export default function Workspace() {
   const { showToast } = useToastify();
   const [submitWorkspace, { isLoading }] = useWorkSpaceSetUpMutation();
   const { data: teamspaces } = useGetTeamSpacesQuery();
+  const { setWorkspaceId, setTeamspaceId } = useWorkspace();
   const [step, setStep] = React.useState<1 | 2>(1);
 
   const {
@@ -80,6 +82,16 @@ export default function Workspace() {
 
       const res = await submitWorkspace(payload).unwrap();
       showToast(res?.message || 'Workspace setup completed', 'success');
+
+      // Set global workspace and teamspace IDs
+      setWorkspaceId(res?.workspace_id);
+      const selectedTeamspace = teamspaces?.teamspaces?.find(
+        (ts: WorkspaceTeamspace) => ts.name === teamspaceName
+      );
+      if (selectedTeamspace) {
+        setTeamspaceId(selectedTeamspace.id);
+      }
+
       router.push(
         `/onboarding/workspace/inviteusers?workspace_id=${res?.workspace_id}`
       );

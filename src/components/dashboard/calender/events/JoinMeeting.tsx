@@ -1,7 +1,6 @@
 'use client';
 import {
   ArrowLeftIcon,
-  DeepIcon,
   StarIcon,
   ViroIcon,
   ZoomIcon,
@@ -22,10 +21,7 @@ export default function JoinMeeting() {
             placeholder="Enter meeting link or ID"
             className="w-full bg-transparent h-full focus:outline-none px-4 text-[#737373] placeholder:text-[#737373]"
           />
-          <div className="gradient-border h-8 flex items-center px-2 gap-2 justify-center text-[10px] text-[#C7F239] w-[107px] rounded-full">
-            <DeepIcon />
-            <h3>Deep Think</h3>
-          </div>
+         
         </div>
         <div className="mt-4 flex gap-2">
           <button

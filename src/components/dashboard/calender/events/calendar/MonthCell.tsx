@@ -7,9 +7,15 @@ type Props = {
   cellDate: Date;
   anchorMonth: Date;
   events: CalendarEventItem[];
+  onEventDetails?: (event: CalendarEventItem) => void;
 };
 
-export default function MonthCell({ cellDate, anchorMonth, events }: Props) {
+export default function MonthCell({
+  cellDate,
+  anchorMonth,
+  events,
+  onEventDetails,
+}: Props) {
   const inMonth = cellDate.getMonth() === anchorMonth.getMonth();
   const dayEvents = events
     .filter((e) => sameDay(startOfDay(e.start), startOfDay(cellDate)))
@@ -36,7 +42,9 @@ export default function MonthCell({ cellDate, anchorMonth, events }: Props) {
           return (
             <div
               key={e.id}
-              className="rounded-md border-[#F8F8F833] border items-center justify-start px-2 bg-[#F8F8F81A] flex min-w-0"
+                                onClick={() => onEventDetails?.(e)}
+
+              className="rounded-md cursor-pointer border-[#F8F8F833] border items-center justify-start px-2 bg-[#F8F8F81A] flex min-w-0"
             >
               <div
                 className={`w-0.5 h-4 shrink-0 rounded ${ACCENT_BAR[accent]}`}
@@ -48,6 +56,7 @@ export default function MonthCell({ cellDate, anchorMonth, events }: Props) {
                 <p className="text-[9px] text-white/45 truncate">
                   {formatEventTimeRange(e.start, e.end)}
                 </p>
+           
               </div>
             </div>
           );

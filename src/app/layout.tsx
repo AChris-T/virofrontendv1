@@ -1,6 +1,7 @@
 import { SidebarProvider } from '@/context/SidebarContext';
 import { Instrument_Serif, Inter } from 'next/font/google';
 import { ThemeProvider } from '@/context/ThemeContext';
+import { WorkspaceProvider } from '@/context/WorkspaceContext';
 import Providers from '@/lib/Providers';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import config from '@/config';
@@ -11,8 +12,6 @@ import { loadingIndicatorProperties } from '@/utils/constant';
 import './globals.css';
 import GlobalAuthHandler from '@/components/auth/GlobalAuthHandler';
 import localFont from 'next/font/local';
-
-
 
 const generalFont = localFont({
   src: [
@@ -109,7 +108,9 @@ export default function RootLayout({
           <Providers>
             <GlobalAuthHandler />
             <ThemeProvider>
-              <SidebarProvider>{children}</SidebarProvider>
+              <WorkspaceProvider>
+                <SidebarProvider>{children}</SidebarProvider>
+              </WorkspaceProvider>
             </ThemeProvider>
           </Providers>
           <ToastContainer className="z-999999" />

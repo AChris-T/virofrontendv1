@@ -11,7 +11,7 @@ export const metadata: Metadata = generateMetadata({
 
 export default function page() {
   return (
-    <div>
+    <div className=''>
       <CalenderHeader />
     </div>
   );

@@ -9,9 +9,10 @@ type Props = {
   anchorMonth: Date;
   monthGrid: Date[][];
   events: CalendarEventItem[];
+  onEventDetails?: (event: CalendarEventItem) => void;
 };
 
-export default function MonthView({ anchorMonth, monthGrid, events }: Props) {
+export default function MonthView({ anchorMonth, monthGrid, events, onEventDetails }: Props) {
   return (
     <div className="border border-[#262626] rounded-xl overflow-hidden">
       <div className="grid grid-cols-7 border-b border-[#262626]">
@@ -28,6 +29,7 @@ export default function MonthView({ anchorMonth, monthGrid, events }: Props) {
             cellDate={cellDate}
             anchorMonth={anchorMonth}
             events={events}
+            onEventDetails={onEventDetails}
           />
         ))}
       </div>

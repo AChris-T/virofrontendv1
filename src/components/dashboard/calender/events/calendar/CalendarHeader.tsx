@@ -1,8 +1,9 @@
 'use client';
 
 import React from 'react';
-import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { CalendarViewMode } from '@/components/types';
+import SelectDropdown from '@/components/ui/dropdown/SelectDropdown';
 
 type Props = {
   title: string;
@@ -21,6 +22,13 @@ export default function CalendarHeader({
   onNext,
   onToday,
 }: Props) {
+  const scheduleOptions: Array<{ label: string; value: CalendarViewMode }> = [
+    { label: 'Day', value: 'day' },
+    { label: 'Week', value: 'week' },
+    { label: 'Month', value: 'month' },
+    { label: 'Schedule', value: 'schedule' },
+  ];
+
   return (
     <div className="flex font-general flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <h2 className="  text-white-200 font-medium tracking-tight">{title}</h2>
@@ -42,20 +50,15 @@ export default function CalendarHeader({
           <ChevronRight className="h-4 w-4" />
         </button>
 
-        <div className="relative">
-          <select
-            name="view"
-            aria-label="Calendar view"
-            value={view}
-            onChange={(e) => onViewChange(e.target.value as CalendarViewMode)}
-            className="appearance-none h-9 pl-3 pr-8 rounded-lg focus:outline-none bg-[#141414] text-sm text-white/90 cursor-pointer"
-          >
-            <option value="day">Day</option>
-            <option value="week">Week</option>
-            <option value="month">Month</option>
-          </select>
-          <ChevronDown className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-white/50" />
-        </div>
+        <SelectDropdown
+          name="schedule"
+          ariaLabel="Schedule view"
+          value={view}
+          options={scheduleOptions}
+          onChange={onViewChange}
+          triggerClassName="cursor-pointer"
+          menuClassName="max-w-[100px] text-sm"
+        />
 
         <button
           type="button"

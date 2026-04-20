@@ -6,7 +6,27 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import Calender from './Calender';
 
-export default function EventDetail() {
+type EventDetailProps = {
+  calendarEvents?: any;
+  isLoadingEvents?: boolean;
+  interval?: 'day' | 'week' | 'month' | 'schedule';
+  onIntervalChange?: (interval: 'day' | 'week' | 'month' | 'schedule') => void;
+  startDate?: Date;
+  endDate?: Date;
+  anchorDate?: Date;
+  onAnchorDateChange?: (date: Date) => void;
+};
+
+export default function EventDetail({
+  calendarEvents,
+  isLoadingEvents,
+  interval = 'day',
+  onIntervalChange,
+  //startDate,
+  //endDate,
+  anchorDate = new Date(),
+  onAnchorDateChange,
+}: EventDetailProps) {
   const user = useSelector((state: RootState) => state.profile.user);
   return (
     <div className="space-y-3">
@@ -27,7 +47,14 @@ export default function EventDetail() {
           onJoin={() => console.log('Joining meeting...')}
         />
       </div>
-      <Calender/>
+      <Calender
+        events={calendarEvents}
+        isLoading={isLoadingEvents}
+        interval={interval}
+        onIntervalChange={onIntervalChange}
+        anchorDate={anchorDate}
+        onAnchorDateChange={onAnchorDateChange}
+      />
     </div>
   );
 }

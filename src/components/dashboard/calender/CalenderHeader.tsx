@@ -15,6 +15,8 @@ import { HeaderSlot } from '@/layout/dashboard/Header';
 import { SidePanel } from '@/components/ui/modal/SidePanel';
 import JoinMeeting from './events/JoinMeeting';
 import CreateMeeting from './events/CreateMeeting';
+import { useGetIntegrationsQuery } from '@/store/dashboard/dashboard.api';
+import { useWorkspace } from '@/context/WorkspaceContext';
 
 export default function CalenderHeader() {
   const currentSearchParams = useSearchParams();
@@ -22,9 +24,14 @@ export default function CalenderHeader() {
   const [isIntegrationsOpen, setIsIntegrationsOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const [openCreate, setOpenCreate] = useState(false);
+  const [interval, setInterval] = useState<'day' | 'week' | 'month' | 'schedule'>('day');
   const openIntegrations = useCallback(() => setIsIntegrationsOpen(true), []);
   const closeIntegrations = useCallback(() => setIsIntegrationsOpen(false), []);
-
+  const { workspaceId: WorkspaceId, teamspaceId: TeamspaceId } = useWorkspace();
+  const { data, isLoading, isError } = useGetIntegrationsQuery(
+    { workspaceid: WorkspaceId ?? '', teamspaceid: TeamspaceId ?? '' },
+    { skip: !WorkspaceId || !TeamspaceId }
+  );
   return (
     <div>
       <HeaderSlot>
@@ -63,7 +70,7 @@ export default function CalenderHeader() {
         width="w-[540px]"
         className="p-0"
       >
-        <CreateMeeting />
+        <CreateMeeting onSuccess={() => setOpenCreate(false)} />
       </SidePanel>
       <Suspense>
         <div className="flex w-full justify-between text-white border-b border-[#0F0F0F] px-6 p-2 mx-auto ">
@@ -110,10 +117,19 @@ export default function CalenderHeader() {
           className="max-w-[500px]"
           Title="Integrate Platforms"
         >
-          <IntegratePlatforms />
+          <IntegratePlatforms data={data} isLoading={isLoading} isError={isError}  />
         </Modal>
 
-        {activeTab === 'events' && <EventDetails />}
+        {activeTab === 'events' && (
+          <EventDetails
+            data={data}
+            isLoading={isLoading}
+            workspaceId={WorkspaceId}
+            teamspaceId={TeamspaceId}
+            interval={interval}
+            onIntervalChange={setInterval}
+          />
+        )}
         {activeTab === 'activity' && 'Yes'}
       </Suspense>
     </div>

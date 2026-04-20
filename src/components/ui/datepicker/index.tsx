@@ -152,7 +152,7 @@ export function DatePicker({
 
       {/* Calendar dropdown */}
       {open && (
-        <div className="absolute z-50 mt-2 rounded-xl border border-[#202124] bg-[#0f0f10] p-3 shadow-xl">
+        <div className="absolute z-50 right-0 mt-2 rounded-xl border border-[#202124] bg-[#0f0f10] p-3 shadow-xl">
           <DayPicker
             mode="single"
             selected={selected}

@@ -4,14 +4,17 @@ import {
   GoogleCalenderIcon,
   MicroSoftCalenderIcon,
 } from '@/assets/icons';
+import { useWorkspace } from '@/context/WorkspaceContext';
+import { useConnectGoogleCalenderMutation } from '@/store/dashboard/dashboard.api';
 import React, { useMemo, useState } from 'react';
 
-export default function ConnectCalender({
-  setEventDetailState,
-}: {
-  setEventDetailState: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+export default function ConnectCalender() {
   const [calendarProvider, setCalendarProvider] = useState<string | null>(null);
+  const contextWorkspace = useWorkspace();
+  const workspaceId = contextWorkspace.workspaceId;
+  const teamspaceId = contextWorkspace.teamspaceId;
+  const [connectGoogleCalendar, { isLoading }] =
+    useConnectGoogleCalenderMutation();
 
   const providers = useMemo(
     () => [
@@ -31,10 +34,28 @@ export default function ConnectCalender({
     setCalendarProvider(label);
   };
 
-  const handleSubmit = () => {
-    console.log('Selected Calendar Provider:', calendarProvider);
-    setEventDetailState(true);
-    // Add your form submission logic here
+  const handleSubmit = async () => {
+    if (calendarProvider !== 'Google Calendar') {
+      return;
+    }
+
+    if (!workspaceId || !teamspaceId) {
+      return;
+    }
+
+    try {
+      const response = await connectGoogleCalendar({
+        frontend_redirect_url:'http://localhost:3000/dashboard/calendar',
+        workspaceid: workspaceId,
+        teamspaceid: teamspaceId,
+      }).unwrap();
+
+      if (response?.auth_url) {
+        window.location.assign(response.auth_url);
+      }
+    } catch (error) {
+      console.error('Failed to connect Google Calendar', error);
+    }
   };
 
   return (
@@ -79,8 +100,8 @@ export default function ConnectCalender({
         <button
           type="button"
           onClick={handleSubmit}
-          disabled={!calendarProvider}
-          className={`flex font-general items-center  justify-center gap-2 w-[170px] px-4 py-2.5 text-sm font-medium text-white transition rounded-full shadow-theme-xs ${!calendarProvider ? 'bg-gray-600 cursor-not-allowed' : 'bg-green-100'}`}
+          disabled={!calendarProvider || isLoading}
+          className={`flex font-general items-center  justify-center gap-2 w-[170px] px-4 py-2.5 text-sm font-medium text-white transition rounded-full shadow-theme-xs ${!calendarProvider || isLoading ? 'bg-gray-600 cursor-not-allowed' : 'bg-green-100'}`}
         >
           Connect Calendar
           <span className="mt-1">
