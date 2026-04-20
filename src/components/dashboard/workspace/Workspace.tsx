@@ -8,9 +8,9 @@ import Loader from '@/components/ui/Loader';
 import { useWorkSpaceSetUpMutation } from '@/store/profile/profile.api';
 import type { WorkSpaceSetUpRequestPayload } from '@/store/profile/profile.api';
 import { useGetTeamSpacesQuery } from '@/store/dashboard/dashboard.api';
-import type { WorkspaceTeamspace } from '@/store/dashboard/dashboard.api';
 import { TeamSpaceCard } from '@/components/ui/TeamsSpaceCard';
 import { useWorkspace } from '@/context/WorkspaceContext';
+import type { WorkspaceTeamspace } from '@/components/types';
 
 type WorkspaceFormInputs = WorkSpaceSetUpRequestPayload;
 
