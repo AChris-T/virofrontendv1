@@ -1,5 +1,4 @@
 'use client';
-
 import { useSidebar } from '@/context/SidebarContext';
 import AppHeader from '@/layout/dashboard/AppHeader';
 import AppSidebar from '@/layout/dashboard/AppSidebar';
@@ -15,21 +14,23 @@ export default function AdminLayout({
   const { isExpanded, isHovered, isMobileOpen } = useSidebar();
 
   const mainContentMargin = isMobileOpen
-    ? 'ml-0'
+    ? 'ml-2'
     : isExpanded || isHovered
-      ? 'lg:ml-[290px]'
-      : 'lg:ml-[90px]';
+      ? 'lg:ml-[300px]'
+      : 'lg:ml-[100px]';
 
   return (
-    <div className="min-h-screen bg-[#060606] xl:flex">
+    <div className="min-h-screen max-h-[100vh] overflow-y-hidden p-2 bg-[#171717] xl:flex">
       <HeaderProvider>
         <AppSidebar />
         <Backdrop />
         <div
-          className={`flex-1 transition-all  duration-300 ease-in-out ${mainContentMargin}`}
+          className={`flex-1 overflow-y-hidden  transition-all bg-[#171717] border border-[#333333] m-2 rounded-lg  duration-300 ease-in-out ${mainContentMargin}`}
         >
           <AppHeader />
-          <div className=" ">{children}</div>
+          <div className="max-h-[95vh] overscroll-y-scroll backgroundde ">
+            {children}
+          </div>
         </div>
       </HeaderProvider>
     </div>

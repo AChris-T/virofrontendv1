@@ -1,9 +1,6 @@
-import { StarIcon, ZoomIcon } from '@/assets/icons';
+import { ViroIcon, ZoomIcon } from '@/assets/icons';
 import { MeetingCard } from '@/components/ui/cards/MeetingCards';
-import { RootState } from '@/store';
-import { getGreeting } from '@/utils/getGreeting';
 import React from 'react';
-import { useSelector } from 'react-redux';
 import Calender from './Calender';
 
 type EventDetailProps = {
@@ -14,10 +11,14 @@ type EventDetailProps = {
   startDate?: Date;
   endDate?: Date;
   anchorDate?: Date;
+  workspaceId?: string;
+  teamspaceId?: string;
   onAnchorDateChange?: (date: Date) => void;
 };
 
 export default function EventDetail({
+  workspaceId,
+  teamspaceId,
   calendarEvents,
   isLoadingEvents,
   interval = 'day',
@@ -27,29 +28,32 @@ export default function EventDetail({
   anchorDate = new Date(),
   onAnchorDateChange,
 }: EventDetailProps) {
-  const user = useSelector((state: RootState) => state.profile.user);
   return (
     <div className="space-y-3">
-      <h3 className="text-white-200 font-medium  font-general">
-        {getGreeting()}, {user?.first_name}
-      </h3>
-      <div className="grid grid-cols-3 ">
-        <MeetingCard
-          title="Acme Sales Demo"
-          description="Sales pitch meeting with Acme sales person"
-          startTime="3:30 PM"
-          endTime="4:30 PM"
-          descriptionIcon={<StarIcon />}
-          meetingIcon={<ZoomIcon />}
-          showAssignToggle
-          isAssigned={true}
-          onToggleAssign={(val) => console.log('Assigned:', val)}
-          onJoin={() => console.log('Joining meeting...')}
-        />
+      <div className="space-y-4 ">
+        <h3 className="text-[#797B72] text-xs font-semibold">
+          UPCOMING EVENTS
+        </h3>
+        <div className="grid lg:grid-cols-3 md:grid-cols-2 ">
+          <MeetingCard
+            title="Acme Sales Demo"
+            description="Sales pitch meeting with Acme sales person"
+            startTime="3:30 PM"
+            endTime="4:30 PM"
+            descriptionIcon={<ViroIcon fill="#C7F239" />}
+            meetingIcon={<ZoomIcon width="28" height="28" />}
+            showAssignToggle
+            isAssigned={true}
+            onToggleAssign={(val) => console.log('Assigned:', val)}
+            onJoin={() => console.log('Joining meeting...')}
+          />
+        </div>
       </div>
       <Calender
         events={calendarEvents}
         isLoading={isLoadingEvents}
+        workspaceId={workspaceId}
+        teamspaceId={teamspaceId}
         interval={interval}
         onIntervalChange={onIntervalChange}
         anchorDate={anchorDate}

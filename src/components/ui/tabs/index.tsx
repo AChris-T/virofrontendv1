@@ -34,37 +34,37 @@ export function Tabs({
   };
 
   return (
-    <div className="flex items-center   gap-1">
+    <div className="flex items-center bg-[#0F0F0F] py-1 rounded-[10px]   gap-4">
       {tabs.map((tab) => {
         const isActive = active === tab.value;
         return (
           <button
             key={tab.value}
             onClick={() => handleChange(tab.value)}
-            className="relative flex items-center gap-1.5 px-3 pt-2 text-base transition-colors"
+            className="relative flex items-center gap-1.5  text-base transition-colors"
           >
             {/* Icon — pass isActive so icon can change color itself */}
-            {tab.icon && (
+            {/*    {tab.icon && (
               <span className="w-4 h-4 flex items-center justify-center">
                 {typeof tab.icon === 'function' ? tab.icon(isActive) : tab.icon}
               </span>
-            )}
+            )} */}
 
             {/* Gradient text when active, muted when not */}
             <span
               className={
                 isActive
-                  ? 'bg-[linear-gradient(90deg,#3CF239,#DDF239)] bg-clip-text text-transparent font-medium'
-                  : 'text-[#A6A6A6] hover:text-white/70'
+                  ? 'bg-[#363636] rounded-lg text-[#FDFDFD] text-sm px-4 py-2  font-medium'
+                  : 'text-[#A6A6A6] hover:text-[#A6A6A6] mx-3 text-sm'
               }
             >
               {tab.label}
             </span>
 
             {/* Active underline */}
-            {isActive && (
+            {/*    {isActive && (
               <span className="absolute left-1/2 -translate-x-1/2  -bottom-3.5 w-[32px] h-[2px] bg-[linear-gradient(90deg,#3CF239,#DDF239)] rounded-tr-[4px] rounded-tl-[4px]" />
-            )}
+            )} */}
           </button>
         );
       })}

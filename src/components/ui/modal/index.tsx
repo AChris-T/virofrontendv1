@@ -11,11 +11,13 @@ interface ModalProps {
   children: React.ReactNode;
   showCloseButton?: boolean;
   isFullscreen?: boolean;
+  iconTitle?: React.ReactNode;
 }
 
 export const Modal: React.FC<ModalProps> = ({
   isOpen,
   onClose,
+  iconTitle,
   Title,
   children,
   className,
@@ -56,7 +58,7 @@ export const Modal: React.FC<ModalProps> = ({
 
   const contentClasses = isFullscreen
     ? 'w-full  mx-auto'
-    : 'relative w-full  rounded-[15px] mx-auto  dark:bg-gray-900';
+    : 'relative w-full  rounded-[15px] mx-auto border-[#333333] border  dark:bg-gray-900';
 
   return createPortal(
     <div className="fixed inset-0 flex items-center justify-center overflow-y-auto modal z-99999">
@@ -68,18 +70,21 @@ export const Modal: React.FC<ModalProps> = ({
       )}
       <div
         ref={modalRef}
-        className={`${contentClasses}  ${className} bg-[#060606] flex flex-col `}
+        className={`${contentClasses}  ${className} bg-[#171717] flex flex-col `}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center border-b border-[#0F0F0F] justify-between w-full relative px-4 py-3">
-          <h3 className="text-base font-general text-white-100 ">{Title}</h3>
+        <div className="flex backgrounddesModal items-center  justify-between w-full relative px-4 py-3">
+          <h3 className="text-base flex items-center gap-2 font-medium font-general text-white-100 ">
+            {iconTitle}
+            {Title}
+          </h3>
           {showCloseButton && (
             <button onClick={onClose} className=" ">
               <CloseIcon fill={'#BFBFBF'} />
             </button>
           )}
         </div>
-        <div>{children}</div>
+        <div className="bg-[#2E2E2E] m-2 rounded-lg">{children}</div>
       </div>
     </div>,
     document.body

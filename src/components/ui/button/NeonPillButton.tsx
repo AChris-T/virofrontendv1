@@ -5,6 +5,7 @@ export interface NeonPillOption {
   label: string;
   value: string;
   disabled?: boolean;
+  icon?: ReactNode;
 }
 
 interface NeonPillButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -18,28 +19,6 @@ interface NeonPillButtonProps extends React.ButtonHTMLAttributes<HTMLButtonEleme
   onSelectOption?: (option: NeonPillOption) => void;
   dropdownClassName?: string;
 }
-
-const DefaultLeadingIcon = () => {
-  return (
-    <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-[#3A3F47] bg-[#161A20]">
-      <svg
-        width="10"
-        height="10"
-        viewBox="0 0 10 10"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <circle cx="5" cy="5" r="4.25" stroke="#707884" strokeWidth="1.5" />
-        <path
-          d="M7.45 2.55L2.55 7.45"
-          stroke="#9CA3AF"
-          strokeWidth="1.4"
-          strokeLinecap="round"
-        />
-      </svg>
-    </span>
-  );
-};
 
 const DefaultTrailingIcon = () => {
   return (
@@ -63,8 +42,7 @@ const DefaultTrailingIcon = () => {
 };
 
 export default function NeonPillButton({
-  label = 'Co-Pilot',
-  leadingIcon,
+  label = 'bot_mode',
   trailingIcon,
   className,
   innerClassName,
@@ -135,7 +113,7 @@ export default function NeonPillButton({
       <button
         type={type}
         className={twMerge(
-          'inline-flex rounded-full gradient-border  p-[1px] transition-transform duration-200 hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-60',
+          'inline-flex rounded-lg border-[#333] border bg-[#262626]  p-[1px] transition-transform duration-200 hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-60',
           className
         )}
         onClick={handleMainClick}
@@ -145,11 +123,10 @@ export default function NeonPillButton({
       >
         <span
           className={twMerge(
-            'inline-flex items-center gap-2 rounded-full  px-3.5 py-2 text-sm font-medium font-general text-[#E6E9EE]',
+            'inline-flex items-center gap-2 rounded-full  px-3.5 py-2 text-sm font-medium font-general text-[#FDFDFD]',
             innerClassName
           )}
         >
-          {leadingIcon ?? <DefaultLeadingIcon />}
           <span>{activeLabel}</span>
           {trailingIcon ?? <DefaultTrailingIcon />}
         </span>
@@ -159,7 +136,7 @@ export default function NeonPillButton({
         <div
           role="menu"
           className={twMerge(
-            'absolute left-0 z-40 mt-2 min-w-full rounded-xl border border-[#2A2F37] bg-[#0E1218] p-1 ',
+            'absolute left-0 z-40 mt-2 min-w-[180px] overflow-hidden rounded-[18px] border border-[#2A2F37] bg-[#111111] p-1 shadow-[0_16px_40px_rgba(0,0,0,0.45)]',
             dropdownClassName
           )}
         >
@@ -174,17 +151,38 @@ export default function NeonPillButton({
                 disabled={option.disabled}
                 onClick={() => handleSelect(option)}
                 className={twMerge(
-                  'flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-sm font-general transition-colors',
+                  'flex w-full items-center justify-between rounded-full px-3 py-2.5 text-left font-general transition-colors',
                   isActive
-                    ? 'bg-[#1B212A] text-[#E6E9EE]'
-                    : 'text-[#B5BDC8] hover:bg-[#161B23] hover:text-[#E6E9EE]',
+                    ? 'bg-[#1A1A1A] text-[#F1F5F9]'
+                    : 'text-[#D0D5DD] hover:bg-[#171717] hover:text-[#F1F5F9]',
                   option.disabled ? 'cursor-not-allowed opacity-50' : ''
                 )}
               >
-                <span>{option.label}</span>
-                {isActive && (
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#9CDD1A]" />
-                )}
+                <span className="flex min-w-0 items-center gap-2.5">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full border border-[#343434] bg-[#1D1D1D] text-[#AEB4BF]">
+                    {option.icon ?? (
+                      <span className="h-2 w-2 rounded-full bg-[#7E8794]" />
+                    )}
+                  </span>
+                  <span className="truncate text-sm">{option.label}</span>
+                </span>
+
+                <span
+                  className={twMerge(
+                    'ml-3 flex h-4 w-4 items-center justify-center rounded-full border transition-colors',
+                    isActive
+                      ? 'border-[#9CDD1A] bg-[#1C2413]'
+                      : 'border-[#303030]'
+                  )}
+                  aria-hidden="true"
+                >
+                  <span
+                    className={twMerge(
+                      'h-2.5 w-2.5 rounded-full transition-colors',
+                      isActive ? 'bg-[#9CDD1A]' : 'bg-[#3A3A3A]'
+                    )}
+                  />
+                </span>
               </button>
             );
           })}

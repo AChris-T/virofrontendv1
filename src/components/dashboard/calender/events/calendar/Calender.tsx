@@ -5,6 +5,7 @@ import MonthView from './MonthView';
 import ScheduleView from './ScheduleView';
 import TimeGrid from './TimeGrid';
 import CalendarEventsSkeleton from '@/components/ui/skeleton/CalendarEventsSkeleton';
+import MeetingDetailsSidePanelSkeleton from '@/components/ui/skeleton/MeetingDetailsSidePanelSkeleton';
 import { SidePanel } from '@/components/ui/modal/SidePanel';
 import {
   addDays,
@@ -17,7 +18,6 @@ import {
 } from '@/utils/data';
 import { CalendarEventItem, CalendarViewMode } from '@/components/types';
 import { useGetMeetingEventDetailsQuery } from '@/store/dashboard/dashboard.api';
-import { useWorkspace } from '@/context/WorkspaceContext';
 import { timeRange } from '@/utils/timeRange';
 import AssignAgent from './AssignAgent';
 import MeetingDetailsDisplay from './MeetingDetailsDisplay';
@@ -28,20 +28,21 @@ type CalenderProps = {
   interval?: 'day' | 'week' | 'month' | 'schedule';
   onIntervalChange?: (interval: 'day' | 'week' | 'month' | 'schedule') => void;
   anchorDate?: Date;
+  workspaceId?: string;
+  teamspaceId?: string;
   onAnchorDateChange?: (date: Date) => void;
 };
 
 export default function Calender({
   events: externalEvents,
   isLoading,
+  workspaceId,
+  teamspaceId,
   interval,
   onIntervalChange,
   anchorDate = new Date(),
   onAnchorDateChange,
 }: CalenderProps) {
-  const contextWorkspace = useWorkspace();
-  const workspaceId = contextWorkspace.workspaceId;
-  const teamspaceId = contextWorkspace.teamspaceId;
   const [view, setView] = React.useState<CalendarViewMode>(
     interval ? (interval as CalendarViewMode) : 'week'
   );
@@ -105,19 +106,25 @@ export default function Calender({
     setSelectedInviteId(inviteId || null);
   };
   const {
-    data: meetingDetails,
+    currentData: currentMeetingDetails,
     isLoading: isMeetingDetailsLoading,
+    isFetching: isMeetingDetailsFetching,
     isError: isMeetingDetailsError,
   } = useGetMeetingEventDetailsQuery(
     {
       workspaceid: workspaceId ?? '',
       teamspaceid: teamspaceId ?? '',
       eventId: selectedInviteId ?? '',
+      data: {},
     },
     {
       skip: !workspaceId || !teamspaceId || !selectedInviteId,
     }
   );
+
+  const sidePanelDetails = currentMeetingDetails;
+  const isSidePanelDetailsLoading = Boolean(selectedInviteId) && !sidePanelDetails;
+
   return (
     <>
       <div className="w-full min-w-0 max-w-full space-y-4 text-white font-general overflow-x-auto">
@@ -166,23 +173,42 @@ export default function Calender({
       <SidePanel
         isOpen={Boolean(selectedInviteId)}
         onClose={() => setSelectedInviteId(null)}
-        headings="Meeting  details"
-        title={meetingDetails?.title}
+        headings="Event Details"
         width="w-[500px]"
+        title={isSidePanelDetailsLoading ? '' : sidePanelDetails?.title}
         subtitle={
-          meetingDetails?.start_time && meetingDetails?.end_time
-            ? timeRange(meetingDetails.start_time, meetingDetails.end_time)
+          !isSidePanelDetailsLoading &&
+          sidePanelDetails?.start_time &&
+          sidePanelDetails?.end_time
+            ? timeRange(sidePanelDetails.start_time, sidePanelDetails.end_time)
             : ''
         }
       >
-        <div className="space-y-4">
-          <AssignAgent />
-          <MeetingDetailsDisplay
-            details={meetingDetails}
-            isLoading={isMeetingDetailsLoading}
-            isError={isMeetingDetailsError}
-          />
-        </div>
+        {isSidePanelDetailsLoading ? (
+          <MeetingDetailsSidePanelSkeleton />
+        ) : (
+          <div className="space-y-4">
+            <AssignAgent
+              title={sidePanelDetails?.title}
+              subtitle={
+                sidePanelDetails?.start_time && sidePanelDetails?.end_time
+                  ? timeRange(
+                      sidePanelDetails.start_time,
+                      sidePanelDetails.end_time
+                    )
+                  : ''
+              }
+              workspaceId={workspaceId}
+              teamspaceId={teamspaceId}
+              details={sidePanelDetails}
+            />
+            <MeetingDetailsDisplay
+              details={sidePanelDetails}
+              isLoading={isMeetingDetailsLoading || isMeetingDetailsFetching}
+              isError={isMeetingDetailsError}
+            />
+          </div>
+        )}
       </SidePanel>
     </>
   );

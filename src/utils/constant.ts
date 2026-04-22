@@ -34,6 +34,15 @@ export const HOURS_IN_GRID = GRID_END_HOUR - GRID_START_HOUR + 1;
 export const TIMEZONE_LABEL = 'GMT+01';
 
 export const WEEK_DAYS = [
+  'Sun',
+  'Mon',
+  'Tues',
+  'Wed',
+  'Thur',
+  'Fri',
+  'Sat',
+] as const;
+export const WEEK_DAYS_LONG= [
   'Sunday',
   'Monday',
   'Tuesday',
@@ -44,13 +53,13 @@ export const WEEK_DAYS = [
 ] as const;
 
 export const WEEK_DAYS_SHORT = [
-  'Sunday',
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday',
+  'Sun',
+  'Mon',
+  'Tues',
+  'Wed',
+  'Thurs',
+  'Fri',
+  'Sat',
 ] as const;
 
 export const ACCENT_BAR: Record<CalendarEventAccent, string> = {

@@ -1,10 +1,5 @@
 'use client';
-import {
-  ArrowLeftIcon,
-  StarIcon,
-  ViroIcon,
-  ZoomIcon,
-} from '@/assets/icons';
+import { ArrowLeftIcon, StarIcon, ViroIcon, ZoomIcon } from '@/assets/icons';
 import { MeetingCard } from '@/components/ui/cards/MeetingCards';
 import { RootState } from '@/store';
 import { useSelector } from 'react-redux';
@@ -21,7 +16,6 @@ export default function JoinMeeting() {
             placeholder="Enter meeting link or ID"
             className="w-full bg-transparent h-full focus:outline-none px-4 text-[#737373] placeholder:text-[#737373]"
           />
-         
         </div>
         <div className="mt-4 flex gap-2">
           <button

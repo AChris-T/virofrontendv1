@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { twMerge } from 'tailwind-merge';
-import { ExpectedIcon, PurposeIcon } from '@/assets/icons';
+import {
+  ExpectedIcon,
+  NoPipelineIcon,
+  ProfileBriefIcon,
+  PurposeIcons,
+  ReportMeetingIcon,
+} from '@/assets/icons';
 
 interface Participant {
   id: string;
@@ -45,14 +51,9 @@ type TabType = 'overview' | 'preparation' | 'participants';
 
 const MeetingDetailsDisplay: React.FC<MeetingDetailsDisplayProps> = ({
   details,
-  isLoading = false,
   isError = false,
 }) => {
   const [activeTab, setActiveTab] = useState<TabType>('overview');
-
-  if (isLoading) {
-    return <p className="text-sm text-gray-400">Loading meeting details...</p>;
-  }
 
   if (isError || !details) {
     return (
@@ -75,15 +76,15 @@ const MeetingDetailsDisplay: React.FC<MeetingDetailsDisplayProps> = ({
   return (
     <div className="space-y-4">
       {/* Tab Navigation */}
-      <div className="flex items-center gap-6 overflow-hidden">
+      <div className="flex items-center py-1 bg-[#0F0F0F] rounded-[10px] justify-between gap-6 overflow-hidden">
         {tabs.map((tab) => (
           <button
             key={tab.value}
             onClick={() => setActiveTab(tab.value)}
             className={twMerge(
-              'relative inline-flex items-center gap-2 whitespace-nowrap px-0 py-2.5 text-sm font-medium transition-colors',
+              'relative inline-flex items-center w-full  justify-center gap-2 whitespace-nowrap px-0 py-2.5 text-sm font-medium transition-colors',
               activeTab === tab.value
-                ? 'text-[#9CDD1A]'
+                ? 'text-[#A9D80E] bg-[#363636] rounded-lg'
                 : 'text-[#8C8C8C] hover:text-[#B5BDC8]'
             )}
           >
@@ -100,49 +101,43 @@ const MeetingDetailsDisplay: React.FC<MeetingDetailsDisplayProps> = ({
                 {tab.count}
               </span>
             )}
-            <span
-              className={twMerge(
-                'pointer-events-none absolute -bottom-px left-1/2 h-0.5 -translate-x-1/2 rounded-full transition-all',
-                activeTab === tab.value
-                  ? 'w-10 bg-[#9CDD1A]'
-                  : 'w-0 bg-transparent'
-              )}
-            />
           </button>
         ))}
       </div>
 
       {/* Overview Tab */}
       {activeTab === 'overview' && (
-        <div className="space-y-4">
+        <div className="space-y-4 bg-[#262626] border border-[#333333] rounded-lg p-2">
           <div className="">
-            <h3 className="text-sm  text-white mb-3">Meeting Overview</h3>
-            <div className="grid grid-cols-2 gap-3">
+            <h3 className="text-sm font-medium text-white-100 mb-3">
+              Meeting Overview
+            </h3>
+            <div className="grid grid-cols-1 gap-2">
               {/* Purpose Box */}
-              <div className="rounded-lg border border-[#404040]  p-4">
+              <div className="rounded-lg bg-[#2E2E2E] border border-[#404040]  p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-[#9CDD1A]">
-                    <PurposeIcon />
+                    <PurposeIcons />
                   </span>
-                  <p className="text-sm  text-white">Purpose</p>
+                  <p className="text-sm font-medium text-white-100">Purpose</p>
                 </div>
-                <p className="text-sm text-white">
+                <p className="text-sm font-medium text-white">
                   {details.description || 'No description provided'}
                 </p>
               </div>
 
               {/* Expected Outcome Box */}
-              <div className="rounded-lg border border-[#404040] p-4">
+              <div className="rounded-lg border bg-[#2E2E2E] border-[#404040] p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-[#9CDD1A]">
                     <ExpectedIcon />
                   </span>
-                  <p className="text-sm text-white  tracking-wide">
+                  <p className="text-sm font-medium text-white-100  tracking-wide">
                     Meeting Details
                   </p>
                 </div>
                 <div className="space-y-2 text-sm text-[#B5BDC8]">
-                  <p className="text-sm text-white">
+                  <p className="text-sm font-medium text-white">
                     No Meeting Details Available
                   </p>
                 </div>
@@ -161,14 +156,15 @@ const MeetingDetailsDisplay: React.FC<MeetingDetailsDisplayProps> = ({
                   {details.post_meeting_analysis}
                 </p>
               ) : (
-                <>
-                  <p className="text-sm text-[#8C8C8C]">
+                <div className="flex flex-col items-center gap-3">
+                  <ReportMeetingIcon />
+                  <p className="text-sm font-medium text-[#FDFDFD]">
                     No meeting insight yet.
                   </p>
-                  <p className="text-xs text-[#595959]">
+                  <p className="text-xs font-medium text-[#a6a6a6]">
                     Insights will be generated after your meeting
                   </p>
-                </>
+                </div>
               )}
             </div>
           </div>
@@ -177,13 +173,13 @@ const MeetingDetailsDisplay: React.FC<MeetingDetailsDisplayProps> = ({
 
       {/* Preparation Tab */}
       {activeTab === 'preparation' && (
-        <div className="space-y-4">
+        <div className="space-y-4 bg-[#262626] border border-[#333333] rounded-lg p-2">
           {/* Pre-Meeting Analysis */}
-          <div>
-            <h3 className="text-sm font-medium text-[#E6E9EE] mb-3">
-              Key Items To Discuss
+          <div className="space-y-3">
+            <h3 className="text-sm font-medium text-white-100 mb-3">
+              Pipeline Stage
             </h3>
-            <div className="rounded-lg border border-[#262626] bg-[#0F0F0F] p-4">
+            <div className="rounded-lg border border-[#333] bg-[#2E2E2E] p-4">
               {details.pre_meeting_analysis ? (
                 <div className="text-sm text-[#B5BDC8] space-y-2">
                   {details.pre_meeting_analysis.split('\n').map((item, idx) => (
@@ -191,9 +187,34 @@ const MeetingDetailsDisplay: React.FC<MeetingDetailsDisplayProps> = ({
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-[#8C8C8C]">
-                  No preparation items available
-                </p>
+                <div className="space-y-[17px]">
+                  <p className="flex gap-2 font-medium items-center text-white-100">
+                    <NoPipelineIcon />
+                    Pipeline
+                  </p>
+                  <p className="text-xs text-[#A6A6A6] font-medium">
+                    This lead doesn’t have an existing pipeline deal.{' '}
+                  </p>
+                </div>
+              )}
+            </div>
+            <div className="rounded-lg border border-[#333] bg-[#2E2E2E] p-4">
+              {details.pre_meeting_analysis ? (
+                <div className="text-sm text-[#B5BDC8] space-y-2">
+                  {details.pre_meeting_analysis.split('\n').map((item, idx) => (
+                    <p key={idx}>• {item.trim()}</p>
+                  ))}
+                </div>
+              ) : (
+                <div className="space-y-[17px]">
+                  <p className="flex gap-2 font-medium items-center text-white-100">
+                    <ExpectedIcon />
+                    Key Items to discuss
+                  </p>
+                  <p className="text-xs text-[#A6A6A6] font-medium">
+                    No Key Item to Discuss{' '}
+                  </p>
+                </div>
               )}
             </div>
           </div>
@@ -212,18 +233,9 @@ const MeetingDetailsDisplay: React.FC<MeetingDetailsDisplayProps> = ({
 
       {/* Participants Tab */}
       {activeTab === 'participants' && (
-        <div className="space-y-4">
-          <div>
-            <h3 className="text-[13px] text-[#A6A6A6] mb-3">
-              <span className="text-base text-white-200 font-medium">
-                Participants{' '}
-              </span>
-              .
-              {participants.length > 0
-                ? `You & ${participants.length - 1} others`
-                : ''}
-            </h3>
-            <div className="space-y-3">
+        <div className="space-y-4 bg-[#262626] border border-[#333333] rounded-lg p-2">
+          <div className="bg-[#2E2E2E] p-2 rounded-lg  max-h-[200px] overflow-y-scroll">
+            <div className="">
               {participants.map((participant) => (
                 <div
                   key={participant.id}
@@ -257,7 +269,7 @@ const MeetingDetailsDisplay: React.FC<MeetingDetailsDisplayProps> = ({
                         </span>
                       )}
                     </p>
-                    <p className="text-xs text-[#737373] truncate">
+                    <p className="text-xs text-white-100 font-medium truncate">
                       {participant.email}
                     </p>
                   </div>
@@ -268,12 +280,13 @@ const MeetingDetailsDisplay: React.FC<MeetingDetailsDisplayProps> = ({
 
           {/* Pre Meeting Brief */}
           <div>
-            <h3 className="text-sm font-medium text-[#E6E9EE] mb-3">
-              Pre Meeting Brief
-            </h3>
-            <div className="rounded-lg border border-[#262626] bg-[#0F0F0F] p-4">
-              <p className="text-sm text-[#8C8C8C]">
-                No pre-meeting brief available
+            <div className="rounded-lg space-y-3 border border-[#262626] bg-[#2E2E2E] p-4">
+              <h3 className="flex items-center gap-2 text-sm font-medium text-white-100">
+                <ProfileBriefIcon />
+                Profile Brief
+              </h3>
+              <p className="text-xs text-[#A6A6A6]">
+                Click on a participant to view profile brief{' '}
               </p>
             </div>
           </div>

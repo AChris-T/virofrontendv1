@@ -1,14 +1,11 @@
 import React, { useMemo } from 'react';
 import ConnectCalender from './ConnectCalender';
 import EventDetail from './EventDetail';
+
 import { ConnectCalendarSkeleton } from '@/components/ui/skeleton/ConnectCalenderSkeleton';
 import { CalendarEventItem, IntergrationResponse } from '@/components/types';
 import { useGetCalendarEventsQuery } from '@/store/dashboard/dashboard.api';
-import {
-  addDays,
-  startOfDay,
-  startOfWeekSunday,
-} from '@/utils/data';
+import { addDays, startOfDay, startOfWeekSunday } from '@/utils/data';
 
 type EventDetailsProps = {
   data?: IntergrationResponse;
@@ -54,7 +51,7 @@ export default function EventDetails({
   // Calculate start and end dates based on interval and anchor date
   const { calculatedStartDate, calculatedEndDate } = useMemo(() => {
     const start = startOfDay(anchorDate);
-    
+
     if (interval === 'week' || interval === 'schedule') {
       const weekStart = startOfWeekSunday(anchorDate);
       const weekEnd = new Date(addDays(weekStart, 6));
@@ -62,7 +59,11 @@ export default function EventDetails({
       return { calculatedStartDate: weekStart, calculatedEndDate: weekEnd };
     } else if (interval === 'month') {
       // Get the last day of the month
-      const monthEnd = new Date(anchorDate.getFullYear(), anchorDate.getMonth() + 1, 0);
+      const monthEnd = new Date(
+        anchorDate.getFullYear(),
+        anchorDate.getMonth() + 1,
+        0
+      );
       monthEnd.setHours(23, 59, 59, 999);
       return { calculatedStartDate: start, calculatedEndDate: monthEnd };
     }
@@ -74,20 +75,22 @@ export default function EventDetails({
   }, [interval, anchorDate]);
   const isGoogleCalendarConnected =
     data?.integrations?.some(
-      (integration) => integration.slug === 'google_calendar' && integration.connected
+      (integration) =>
+        integration.slug === 'google_calendar' && integration.connected
     ) ?? false;
 
-  const { data: calendarEventsData, isLoading: isCalendarEventsLoading } = useGetCalendarEventsQuery(
-    {
-      workspaceid: workspaceId ?? '',
-      teamspaceid: teamspaceId ?? '',
-      platform: 'google_calendar',
-      interval,
-      start_datetime: calculatedStartDate.toISOString(),
-      end_datetime: calculatedEndDate.toISOString(),
-    },
-    { skip: !isGoogleCalendarConnected }
-  );
+  const { data: calendarEventsData, isLoading: isCalendarEventsLoading } =
+    useGetCalendarEventsQuery(
+      {
+        workspaceid: workspaceId ?? '',
+        teamspaceid: teamspaceId ?? '',
+        platform: 'google_calendar',
+        interval,
+        start_datetime: calculatedStartDate.toISOString(),
+        end_datetime: calculatedEndDate.toISOString(),
+      },
+      { skip: !isGoogleCalendarConnected }
+    );
 
   // Extract events array from API response (safely handle different response formats)
   const calendarEvents = React.useMemo(() => {
@@ -95,16 +98,24 @@ export default function EventDetails({
       const start = event.start_time ? new Date(event.start_time) : null;
       const end = event.end_time ? new Date(event.end_time) : null;
 
-      if (!start || !end || Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+      if (
+        !start ||
+        !end ||
+        Number.isNaN(start.getTime()) ||
+        Number.isNaN(end.getTime())
+      ) {
         return null;
       }
 
       const readablePlatform =
-        event.platform?.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase()) ?? 'Meeting';
+        event.platform
+          ?.replace(/_/g, ' ')
+          .replace(/\b\w/g, (char) => char.toUpperCase()) ?? 'Meeting';
 
       return {
         id: event.id ?? `${start.toISOString()}-${end.toISOString()}`,
-        title: event.title?.trim() || event.description?.trim() || readablePlatform,
+        title:
+          event.title?.trim() || event.description?.trim() || readablePlatform,
         start,
         end,
         accent: 'green' as const,
@@ -115,7 +126,9 @@ export default function EventDetails({
       events.filter(Boolean) as CalendarEventItem[];
 
     if (Array.isArray(calendarEventsData)) {
-      return filterValidEvents(calendarEventsData.map((event) => mapEvent(event as ApiCalendarEvent)));
+      return filterValidEvents(
+        calendarEventsData.map((event) => mapEvent(event as ApiCalendarEvent))
+      );
     }
 
     if (calendarEventsData && typeof calendarEventsData === 'object') {
@@ -129,7 +142,11 @@ export default function EventDetails({
         return filterValidEvents(
           data.groups
             .flatMap((group) => group.events ?? [])
-            .concat(data.groups.flatMap((group) => group.days ?? []).flatMap((day) => day.events ?? []))
+            .concat(
+              data.groups
+                .flatMap((group) => group.days ?? [])
+                .flatMap((day) => day.events ?? [])
+            )
             .map(mapEvent)
         );
       }
@@ -142,11 +159,13 @@ export default function EventDetails({
     return <ConnectCalendarSkeleton />;
   }
   return (
-    <div className="font-general  mx-6 pb-20 text-white">
+    <div className="font-general   mx-6 mt-6 pb-20 text-white">
       {isGoogleCalendarConnected ? (
         <div>
           <EventDetail
             calendarEvents={calendarEvents}
+            workspaceId={workspaceId ?? undefined}
+            teamspaceId={teamspaceId ?? undefined}
             isLoadingEvents={isCalendarEventsLoading}
             interval={interval}
             onIntervalChange={onIntervalChange}

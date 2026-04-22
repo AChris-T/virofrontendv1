@@ -12,10 +12,10 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 export interface CalendarEventsRequest {
   workspaceid: string;
   teamspaceid: string;
-  platform: string; // e.g. 'google_calendar'
-  interval: string; // e.g. 'day'
-  start_datetime: string; // ISO 8601 e.g. '2026-04-10T20:29:20.866Z'
-  end_datetime: string; // ISO 8601 e.g. '2026-04-10T20:29:20.866Z'
+  platform: string;
+  interval: string;
+  start_datetime: string;
+  end_datetime: string;
 }
 
 export interface CreateMeetingRequest {
@@ -46,6 +46,11 @@ export interface MeetingDetailRequest {
   workspaceid: string;
   teamspaceid: string;
   eventId: string;
+  data: {
+    title?: string;
+    description?: string;
+    bot_mode?: string;
+  };
 }
 
 export interface MeetingDetailResponse {
@@ -144,6 +149,20 @@ export const DashboardApi = createApi({
         },
       }),
     }),
+    updateMeetingEvent: builder.mutation<
+      MeetingDetailResponse,
+      MeetingDetailRequest
+    >({
+      query: ({ workspaceid, teamspaceid, eventId, data }) => ({
+        url: `/integration/workspace_teamspace/calendar/events/${eventId}`,
+        method: 'PATCH',
+        params: {
+          workspace_id: workspaceid,
+          teamspace_id: teamspaceid,
+        },
+        data,
+      }),
+    }),
   }),
 });
 
@@ -155,5 +174,6 @@ export const {
   useConnectGoogleCalenderMutation,
   useGetCalendarEventsQuery,
   useCreateMeetingEventMutation,
+  useUpdateMeetingEventMutation,
   useGetMeetingEventDetailsQuery,
 } = DashboardApi;

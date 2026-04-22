@@ -10,11 +10,63 @@ body {
   background-position: center;
   height: 100vh;
 }
+.backgrounddes {
+  background: linear-gradient(rgba(38, 38, 38, 0.8)), url('/images/group.png');
+  background-repeat: no-repeat;
+  background-size: auto;
+  background-position: right top;
+}
+.backgrounddesModal {
+  background: linear-gradient(rgba(23, 23, 23, 0.8)), url('/images/group.png');
+  background-repeat: no-repeat;
+  background-size: 200px auto;
+  background-position: right center;
+  border-top-right-radius: 15px;
+  border-top-left-radius: 15px;
+}
+
+.backgroundde {
+  background: linear-gradient(rgba(23, 23, 23, 0.8)), url('/images/group.png');
+  background-repeat: no-repeat;
+  background-size: auto 150;
+  background-position: right top;
+}
+
 .sidebardesign {
   background: url('/authImages/navigation.png');
   background-size: cover;
   background-position: center;
   height: 100vh;
+}
+@layer base {
+  * {
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: #404040 transparent; /* Firefox */
+  }
+
+  /* Chrome / Safari / Edge */
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+      180deg,
+      rgba(60, 242, 57, 0.45) 0%,
+      rgba(221, 242, 57, 0.28) 100%
+    );
+    border-radius: 99px;
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(
+      180deg,
+      rgba(60, 242, 57, 0.75) 0%,
+      rgba(221, 242, 57, 0.5) 100%
+    );
+  }
 }
 
 .welcomebg {

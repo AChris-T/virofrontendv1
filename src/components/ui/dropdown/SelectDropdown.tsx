@@ -38,7 +38,10 @@ export default function SelectDropdown<T extends string>({
 
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
@@ -67,7 +70,7 @@ export default function SelectDropdown<T extends string>({
         aria-expanded={isOpen}
         aria-haspopup="listbox"
         onClick={() => setIsOpen((prev) => !prev)}
-        className={`inline-flex h-9 items-center gap-2 rounded-[6px] bg-[#141414] px-3 text-sm text-white/90 ${triggerClassName ?? ''}`}
+        className={`inline-flex h-9 items-center gap-2 rounded-[6px] bg-[#262626] px-3 text-sm text-white/90 ${triggerClassName ?? ''}`}
       >
         <span>{selected?.label ?? ''}</span>
         <ChevronDown

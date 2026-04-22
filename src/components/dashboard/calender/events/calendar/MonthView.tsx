@@ -12,12 +12,20 @@ type Props = {
   onEventDetails?: (event: CalendarEventItem) => void;
 };
 
-export default function MonthView({ anchorMonth, monthGrid, events, onEventDetails }: Props) {
+export default function MonthView({
+  anchorMonth,
+  monthGrid,
+  events,
+  onEventDetails,
+}: Props) {
   return (
-    <div className="border border-[#262626] rounded-xl overflow-hidden">
+    <div className="border border-[#333333] rounded-lg overflow-hidden mb-10">
       <div className="grid grid-cols-7 border-b border-[#262626]">
         {WEEK_DAYS_SHORT.map((d) => (
-          <div key={d} className="py-2 text-center text-[12px] text-white-100 ">
+          <div
+            key={d}
+            className="py-6 uppercase text-center font-semibold text-[12px] text-white-100 "
+          >
             {d}
           </div>
         ))}

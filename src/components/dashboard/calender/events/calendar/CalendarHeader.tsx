@@ -1,6 +1,4 @@
 'use client';
-
-import React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { CalendarViewMode } from '@/components/types';
 import SelectDropdown from '@/components/ui/dropdown/SelectDropdown';
@@ -32,7 +30,7 @@ export default function CalendarHeader({
   return (
     <div className="flex font-general flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <h2 className="  text-white-200 font-medium tracking-tight">{title}</h2>
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2 ">
         <button
           type="button"
           onClick={onPrev}
@@ -57,13 +55,13 @@ export default function CalendarHeader({
           options={scheduleOptions}
           onChange={onViewChange}
           triggerClassName="cursor-pointer"
-          menuClassName="max-w-[100px] text-sm"
+          menuClassName="max-w-[100px] bg-[#262626] border border-[#333333] text-sm"
         />
 
         <button
           type="button"
           onClick={onToday}
-          className="h-9 px-4 rounded-lg bg-[#0F0F0F] text-sm text-white/90 hover:bg-white/5"
+          className="h-9 px-4 rounded-lg bg-[#262626] border border-[#262626] text-sm text-white/90 hover:bg-white/5"
         >
           Today
         </button>

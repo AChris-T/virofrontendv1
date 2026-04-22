@@ -1,6 +1,6 @@
 export function ConnectCalendarSkeleton() {
   return (
-    <div className="flex flex-col font-general gap-5 items-center  mx-auto py-10">
+    <div className="flex flex-col  font-general gap-5 items-center  mx-auto py-10">
       {/* icon */}
       <div className="w-14 h-14 rounded-full bg-[#1a1a1a] animate-pulse" />
 

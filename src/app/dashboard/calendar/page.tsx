@@ -11,7 +11,7 @@ export const metadata: Metadata = generateMetadata({
 
 export default function page() {
   return (
-    <div className=''>
+    <div className="h-full overflow-y-scroll max-h-[100vh]">
       <CalenderHeader />
     </div>
   );
