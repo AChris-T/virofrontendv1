@@ -136,7 +136,7 @@ export function DatePicker({
     <div ref={ref} className="relative w-full">
       {/* Border wrapper */}
       <div
-        className={` ${focused ? 'gradient-border  ' : 'gradient-border '} h-full  relative rounded-lg p-[1px] px-4 transition-all duration-200`}
+        className={` ${focused ? 'bg-[#262626] ' : 'bg-[#262626]'} h-full  relative rounded-lg p-[1px] px-4 transition-all duration-200`}
         onClick={() => {
           setOpen((prev) => !prev);
           setFocused(true);

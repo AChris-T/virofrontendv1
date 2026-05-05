@@ -113,7 +113,7 @@ export default function RootLayout({
               </WorkspaceProvider>
             </ThemeProvider>
           </Providers>
-          <ToastContainer className="z-999999" />
+          <ToastContainer className="z-[100000]" />
         </GoogleOAuthProvider>
       </body>
     </html>

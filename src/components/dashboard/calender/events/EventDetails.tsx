@@ -45,10 +45,8 @@ export default function EventDetails({
   interval = 'day',
   onIntervalChange,
 }: EventDetailsProps) {
-  // Use a reference/anchor date for navigation
   const [anchorDate, setAnchorDate] = React.useState(() => new Date());
 
-  // Calculate start and end dates based on interval and anchor date
   const { calculatedStartDate, calculatedEndDate } = useMemo(() => {
     const start = startOfDay(anchorDate);
 
@@ -58,7 +56,6 @@ export default function EventDetails({
       weekEnd.setHours(23, 59, 59, 999);
       return { calculatedStartDate: weekStart, calculatedEndDate: weekEnd };
     } else if (interval === 'month') {
-      // Get the last day of the month
       const monthEnd = new Date(
         anchorDate.getFullYear(),
         anchorDate.getMonth() + 1,
@@ -67,8 +64,6 @@ export default function EventDetails({
       monthEnd.setHours(23, 59, 59, 999);
       return { calculatedStartDate: start, calculatedEndDate: monthEnd };
     }
-
-    // Default: day
     const dayEnd = new Date(start);
     dayEnd.setHours(23, 59, 59, 999);
     return { calculatedStartDate: start, calculatedEndDate: dayEnd };
@@ -92,7 +87,6 @@ export default function EventDetails({
       { skip: !isGoogleCalendarConnected }
     );
 
-  // Extract events array from API response (safely handle different response formats)
   const calendarEvents = React.useMemo(() => {
     const mapEvent = (event: ApiCalendarEvent): CalendarEventItem | null => {
       const start = event.start_time ? new Date(event.start_time) : null;

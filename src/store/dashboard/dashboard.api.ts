@@ -1,67 +1,28 @@
 import {
+  CreatePipelineRequest,
+  CreatePipelineResponse,
   IntegrationsRequest,
   IntergrationResponse,
   InviteWorkspaceUsersPayload,
   InviteWorkspaceUsersResponse,
+  PipelineStagesResponse,
   TeamSpacesResponse,
   WorkspacesMeResponse,
+  type CalendarEventsRequest,
+  type CreateMeetingRequest,
+  type CreateMeetingResponse,
+  type CreateDealNoteRequest,
+  type MeetingDetailRequest,
+  type MeetingDetailResponse,
+  type PipelineBoardRequest,
+  type CreateDealRequest,
+  type PipelineBoardResponse,
+  type PipelineDataResponse,
+  type PipelineRequest,
+  type UpcomingMeetingResponse,
 } from '@/components/types';
 import { axiosBaseQuery } from '@/lib/baseApi';
 import { createApi } from '@reduxjs/toolkit/query/react';
-
-export interface CalendarEventsRequest {
-  workspaceid: string;
-  teamspaceid: string;
-  platform: string;
-  interval: string;
-  start_datetime: string;
-  end_datetime: string;
-}
-
-export interface CreateMeetingRequest {
-  workspaceid: string;
-  teamspaceid: string;
-  payload: {
-    meeting_platform: string;
-    title: string;
-    description: string;
-    start_time: string;
-    end_time: string;
-    recurrence?: {
-      frequency: string;
-      interval: number;
-      count: number;
-      until: string;
-      by_day: string[];
-    };
-    attendees: string[];
-  };
-}
-export interface CreateMeetingResponse {
-  success: boolean;
-  message: string;
-}
-
-export interface MeetingDetailRequest {
-  workspaceid: string;
-  teamspaceid: string;
-  eventId: string;
-  data: {
-    title?: string;
-    description?: string;
-    bot_mode?: string;
-  };
-}
-
-export interface MeetingDetailResponse {
-  success?: boolean;
-  message?: string;
-  title?: string;
-  start_time?: string | undefined;
-  end_time?: string | undefined;
-  data?: Record<string, unknown>;
-  event?: Record<string, unknown>;
-}
 
 export const DashboardApi = createApi({
   reducerPath: 'dashboardApi',
@@ -136,6 +97,19 @@ export const DashboardApi = createApi({
         data: data.payload,
       }),
     }),
+    upcomingMeetingEvents: builder.query<
+      UpcomingMeetingResponse,
+      IntegrationsRequest
+    >({
+      query: (params) => ({
+        url: `/integration/workspace_teamspace/calendar/events/upcoming`,
+        method: 'GET',
+        params: {
+          workspace_id: params.workspaceid,
+          teamspace_id: params.teamspaceid,
+        },
+      }),
+    }),
     getMeetingEventDetails: builder.query<
       MeetingDetailResponse,
       MeetingDetailRequest
@@ -163,6 +137,101 @@ export const DashboardApi = createApi({
         data,
       }),
     }),
+    createPipeline: builder.mutation<
+      CreatePipelineResponse,
+      CreatePipelineRequest
+    >({
+      query: (data) => ({
+        url: '/pipelines',
+        method: 'POST',
+        params: {
+          workspace_id: data.workspaceid,
+          teamspace_id: data.teamspaceid,
+        },
+        data: data.payload,
+      }),
+    }),
+    createDeal: builder.mutation<unknown, CreateDealRequest>({
+      query: (data) => ({
+        url: `/pipelines/${data.pipeline_id}/deals`,
+        method: 'POST',
+        params: {
+          workspace_id: data.workspaceid,
+          teamspace_id: data.teamspaceid,
+        },
+        data: data.payload,
+      }),
+    }),
+    createDealNote: builder.mutation<unknown, CreateDealNoteRequest>({
+      query: (data) => ({
+        url: `/pipelines/${data.pipeline_id}/deals/${data.deal_id}/note`,
+        method: 'POST',
+        params: {
+          workspace_id: data.workspaceid,
+          teamspace_id: data.teamspaceid,
+        },
+        data: data.payload,
+      }),
+    }),
+    getPipelineData: builder.query<PipelineDataResponse, PipelineRequest>({
+      query: (params) => ({
+        url: '/pipelines/workspace_teamspace',
+        method: 'GET',
+        params: {
+          workspace_id: params.workspaceid,
+          teamspace_id: params.teamspaceid,
+        },
+      }),
+    }),
+    getPipelineBoard: builder.query<
+      PipelineBoardResponse,
+      PipelineBoardRequest
+    >({
+      query: (params) => ({
+        url: `/pipelines/${params.pipeline_id}/board`,
+        method: 'GET',
+        params: {
+          workspace_id: params.workspaceid,
+          teamspace_id: params.teamspaceid,
+        },
+      }),
+    }),
+    getDealDetails: builder.query<any, any>({
+      query: (params) => ({
+        url: `/pipelines/${params.pipeline_id}/deals/${params.deal_id}`,
+        method: 'GET',
+        params: {
+          workspace_id: params.workspaceid,
+          teamspace_id: params.teamspaceid,
+        },
+      }),
+    }),
+    getDealActivity: builder.query<any, any>({
+      query: (params) => ({
+        url: `/pipelines/${params.pipeline_id}/deals/${params.deal_id}/activities`,
+        method: 'GET',
+        params: {
+          workspace_id: params.workspaceid,
+          teamspace_id: params.teamspaceid,
+        },
+      }),
+    }),
+    getDealNotes: builder.query<any, any>({
+      query: (params) => ({
+        url: `/pipelines/${params.pipeline_id}/deals/${params.deal_id}/notes`,
+        method: 'GET',
+        params: {
+          workspace_id: params.workspaceid,
+          teamspace_id: params.teamspaceid,
+        },
+      }),
+    }),
+    getAllStages: builder.query<PipelineStagesResponse, void>({
+      query: () => ({
+        url: '/pipelines/stages',
+        method: 'GET',
+      }),
+    }),
   }),
 });
 
@@ -174,6 +243,16 @@ export const {
   useConnectGoogleCalenderMutation,
   useGetCalendarEventsQuery,
   useCreateMeetingEventMutation,
+  useUpcomingMeetingEventsQuery,
   useUpdateMeetingEventMutation,
   useGetMeetingEventDetailsQuery,
+  useGetPipelineDataQuery,
+  useGetAllStagesQuery,
+  useGetDealActivityQuery,
+  useGetPipelineBoardQuery,
+  useCreatePipelineMutation,
+  useCreateDealMutation,
+  useCreateDealNoteMutation,
+  useGetDealNotesQuery,
+  useGetDealDetailsQuery,
 } = DashboardApi;

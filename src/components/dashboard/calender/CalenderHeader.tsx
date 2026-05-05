@@ -1,6 +1,7 @@
 'use client';
 import {
   ConnectCalendarIcon,
+  CreatingEventIcon,
   IntegrationIcon,
   JoinMeetingIcon,
   MeetingEventIcon,
@@ -13,7 +14,6 @@ import { useSearchParams } from 'next/navigation';
 import EventDetails from './events/EventDetails';
 import IntegratePlatforms from './IntegratePlatforms';
 //import { HeaderSlot } from '@/layout/dashboard/Header';
-import { SidePanel } from '@/components/ui/modal/SidePanel';
 //import JoinMeeting from './events/JoinMeeting';
 import CreateMeeting from './events/CreateMeeting';
 import { useGetIntegrationsQuery } from '@/store/dashboard/dashboard.api';
@@ -21,6 +21,7 @@ import { useWorkspace } from '@/context/WorkspaceContext';
 import { RootState } from '@/store';
 import { getGreeting } from '@/utils/getGreeting';
 import { useSelector } from 'react-redux';
+import Activity from './events/Activity';
 
 export default function CalenderHeader() {
   const currentSearchParams = useSearchParams();
@@ -74,15 +75,16 @@ export default function CalenderHeader() {
       >
         <JoinMeeting />
       </SidePanel> */}
-      <SidePanel
+      <Modal
         isOpen={openCreate}
         onClose={() => setOpenCreate(false)}
-        headings="Event Detail"
-        width="w-[540px]"
-        className="p-0"
+        Title="Event Detail"
+        iconTitle={<CreatingEventIcon />}
+        //width="w-[540px]"
+        className="max-w-[650px]"
       >
         <CreateMeeting onSuccess={() => setOpenCreate(false)} />
-      </SidePanel>
+      </Modal>
       {isGoogleCalendarConnected && (
         <h3 className="text-[24px]  text-white-200 px-6 py-4 font-instrument-serif">
           {getGreeting()}, {user?.first_name} {user?.last_name}
@@ -160,7 +162,7 @@ export default function CalenderHeader() {
             onIntervalChange={setInterval}
           />
         )}
-        {activeTab === 'activity' && 'Yes'}
+        {activeTab === 'activity' && <Activity />}
       </Suspense>
     </div>
   );

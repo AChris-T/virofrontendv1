@@ -12,7 +12,16 @@ type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   (
-    { label, error, rightIcon, className = '', onFocus, onBlur, ...props },
+    {
+      label,
+      error,
+      rightIcon,
+      leftIcon,
+      className = '',
+      onFocus,
+      onBlur,
+      ...props
+    },
     ref
   ) => {
     const [focused, setFocused] = useState(false);
@@ -23,8 +32,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           <label className="text-sm text-white/60 font-medium">{label}</label>
         )}
         <div
-          className={` ${focused ? 'gradient-border  ' : 'gradient-border '} h-full  relative rounded-lg p-[1px] transition-all duration-200`}
+          className={` ${focused ? 'bg-[#262626]  ' : 'bg-[#262626]'} h-full flex items-center   relative rounded-lg p-[1px] transition-all duration-200`}
         >
+          {leftIcon && <span className="text-white/30 ml-4">{leftIcon}</span>}
           <input
             ref={ref}
             onFocus={(e) => {
@@ -38,11 +48,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             className={`${className} w-full  bg-transparent h-full focus:outline-none px-4 text-white-100 placeholder:text-[#737373]`}
             {...props}
           />
-          {rightIcon && (
-            <span className="text-white/30 flex-shrink-0 w-4 h-4">
-              {rightIcon}
-            </span>
-          )}
+          {rightIcon && <span className="mr-4">{rightIcon}</span>}
         </div>
 
         {error && (

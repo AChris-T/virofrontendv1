@@ -1,7 +1,8 @@
 // components/ui/SidePanel.tsx
 'use client';
 import { useEffect } from 'react';
-import { DoubleArrowIcon } from '@/assets/icons';
+import { CloseIcon, DoubleArrowIcon, ExpandMenuIcon } from '@/assets/icons';
+import Link from 'next/link';
 
 type SidePanelProps = {
   isOpen: boolean;
@@ -12,6 +13,8 @@ type SidePanelProps = {
   className?: string;
   width?: string;
   headings?: string;
+  linkHref?: string;
+  linkLabel?: React.ReactNode;
 };
 export function SidePanel({
   isOpen,
@@ -19,6 +22,8 @@ export function SidePanel({
   children,
   headings,
   width = 'w-[420px]',
+  linkHref,
+  linkLabel = <ExpandMenuIcon />,
 }: SidePanelProps) {
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -39,35 +44,33 @@ export function SidePanel({
     <>
       <div
         onClick={onClose}
-        className={`fixed   font-general z-9999 inset-0 bg-[#0F0F0FE0]  transition-opacity duration-300 ${
+        className={`fixed font-general z-[99990] inset-0 bg-[#0F0F0FE0] transition-opacity duration-300 ${
           isOpen
             ? 'opacity-100 pointer-events-auto'
             : 'opacity-0 pointer-events-none'
         }`}
       />
       <div
-        className={`fixed m-2 max-h-[97vh] top-0 z-99999 right-0 h-full ${width} bg-[#171717] border rounded-lg  border-[#333333] z-50 flex flex-col transition-transform duration-300 ease-in-out ${
+        className={`fixed m-2 max-h-[97vh] top-0 z-[99999] right-0 h-full ${width} bg-[#171717] border rounded-lg border-[#333333] flex flex-col transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0 ' : 'translate-x-full hidden'
         }`}
       >
         {/* Header */}
         <div className="flex flex-col">
-          <div className="flex backgrounddesModal font-medium bg-[#171717] items-center gap-2 text-white-100 text-base p-4 border-[#333333] border-b ">
-            <DoubleArrowIcon />
-            <span> {headings}</span>
-          </div>
-          {/*   <div className={`flex items-start ${className} justify-between`}>
-            <div>
-              {/* <h2 className="text-white text-2xl font-semibold leading-tight">
-                {title}
-              </h2> 
-              {/*  {subtitle && (
-                <p className="text-white-100 text-sm mt-1">{subtitle}</p>
-              )}
+          <div className="flex backgrounddesModal font-medium bg-[#171717] items-center justify-between gap-2 text-white-100 text-base p-4 border-[#333333] border-b ">
+            <div className="flex items-center gap-2">
+              <DoubleArrowIcon />
+              <span> {headings}</span>
             </div>
-          </div> */}
+            <div className="flex items-center gap-2">
+              {linkHref && <Link href={linkHref}>{linkLabel}</Link>}
+              <button onClick={onClose} className=" ">
+                <CloseIcon fill={'#BFBFBF'} />
+              </button>
+            </div>
+          </div>
         </div>
-        <div className="flex-1 overflow-y-auto px-6 py-5 no-scrollbar">
+        <div className="flex-1 overflow-y-auto px-6 pt-5 no-scrollbar">
           {children}
         </div>
       </div>

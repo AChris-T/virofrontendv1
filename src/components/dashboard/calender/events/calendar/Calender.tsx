@@ -123,7 +123,8 @@ export default function Calender({
   );
 
   const sidePanelDetails = currentMeetingDetails;
-  const isSidePanelDetailsLoading = Boolean(selectedInviteId) && !sidePanelDetails;
+  const isSidePanelDetailsLoading =
+    Boolean(selectedInviteId) && !sidePanelDetails;
 
   return (
     <>

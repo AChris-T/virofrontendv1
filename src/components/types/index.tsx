@@ -171,3 +171,282 @@ export interface IntegrationsRequest {
   teamspaceid?: string;
   frontend_redirect_url?: string;
 }
+
+export interface Participant {
+  id: string;
+  display_name: string | null;
+  email: string;
+  display_picture: string | null;
+  is_host: boolean;
+}
+
+interface MeetingDetail {
+  id?: string;
+  organiser_email?: string;
+  title?: string;
+  description?: string | null;
+  meeting_url?: string;
+  platform?: string;
+  bot_mode?: string;
+  status?: string;
+  start_time?: string;
+  end_time?: string;
+  transcript_url?: string | null;
+  audio_recording_url?: string | null;
+  video_recording_url?: string | null;
+  notes?: string | null;
+  date_created?: string;
+  date_updated?: string;
+  participants?: Participant[];
+  pre_meeting_analysis?: string | null;
+  post_meeting_analysis?: string | null;
+  data?: Record<string, unknown>;
+  event?: Record<string, unknown>;
+}
+
+export interface MeetingDetailsDisplayProps {
+  details?: MeetingDetail | null;
+  isLoading?: boolean;
+  isError?: boolean;
+}
+
+export type TabType = 'overview' | 'preparation' | 'participants';
+
+export type MeetingCardProps = {
+  title: string;
+  description?: string;
+  time: string;
+  startTime: string;
+  endTime: string;
+  isToday?: boolean;
+  descriptionIcon?: string | React.ReactNode;
+  meetingIcon?: string | React.ReactNode;
+  showAssignToggle?: boolean;
+  isAssigned?: boolean;
+  onToggleAssign?: (value: boolean) => void;
+
+  onJoin?: () => void;
+};
+
+export interface CalendarEventsRequest {
+  workspaceid: string;
+  teamspaceid: string;
+  platform: string;
+  interval: string;
+  start_datetime: string;
+  end_datetime: string;
+}
+
+export interface CreateMeetingRequest {
+  workspaceid: string;
+  teamspaceid: string;
+  payload: {
+    meeting_platform: string;
+    title: string;
+    description: string;
+    start_time: string;
+    end_time: string;
+    recurrence?: {
+      frequency: string;
+      interval: number;
+      count: number;
+      until: string;
+      by_day: string[];
+    };
+    attendees: string[];
+  };
+}
+export interface CreateMeetingResponse {
+  success: boolean;
+  message: string;
+}
+
+export interface MeetingDetailRequest {
+  workspaceid: string;
+  teamspaceid: string;
+  eventId: string;
+  data: {
+    title?: string;
+    description?: string;
+    bot_mode?: string;
+  };
+}
+
+export interface MeetingDetailResponse {
+  success?: boolean;
+  message?: string;
+  title?: string;
+  start_time?: string | undefined;
+  end_time?: string | undefined;
+  data?: Record<string, unknown>;
+  event?: Record<string, unknown>;
+}
+export interface UpcomingMeetingResponse {
+  success: boolean;
+  message: string;
+  events: {
+    id: string;
+    title: string;
+    description: string;
+    time: string;
+    platform: string;
+    start_time: string;
+    end_time: string;
+  }[];
+}
+
+export interface PipelineDataResponse {
+  success: boolean;
+  message: string;
+}
+export interface PipelineRequest {
+  workspaceid: string;
+  teamspaceid: string;
+}
+
+/** GET /pipelines/:id/board */
+export interface PipelineBoardDealApi {
+  id: string;
+  name?: string;
+  title?: string;
+  company?: string;
+  company_name?: string;
+  amount?: number;
+  value?: number;
+  priority?: string | null;
+  close_date?: string | null;
+  due_date?: string | null;
+  expected_close_date?: string | null;
+  win_probability?: number;
+  assignee?:
+    | string
+    | {
+        first_name?: string | null;
+        last_name?: string | null;
+        email?: string | null;
+      }
+    | null;
+  owner?:
+    | string
+    | { first_name?: string | null; last_name?: string | null }
+    | null;
+}
+
+export interface PipelineBoardColumnApi {
+  has_more: boolean;
+  next_cursor: string | null;
+  stage: string;
+  label: string;
+  description: string;
+  deal_count: number;
+  total_value: number;
+  deals: PipelineBoardDealApi[];
+}
+
+export interface PipelineBoardResponse {
+  total_deals: number;
+  total_pipeline_value: number;
+  columns: PipelineBoardColumnApi[];
+}
+
+export interface PipelineBoardRequest {
+  pipeline_id: string;
+  workspaceid: string;
+  teamspaceid: string;
+}
+
+/** Pipeline resource from API (list/detail), used when creating deals */
+export interface PipelineEntity {
+  id: string;
+  name: string;
+  stages: string[];
+  stages_labels: Record<string, string>;
+  stages_descriptions: Record<string, string>;
+  workspace_id?: string;
+  teamspace_id?: string;
+  date_created?: string;
+  date_updated?: string;
+}
+
+export interface PipelineStageDefinition {
+  key: string;
+  label: string;
+  description: string;
+}
+
+export type PipelineStagesResponse = Record<string, PipelineStageDefinition[]>;
+
+export interface CreatePipelinePayload {
+  name: string;
+  stages: string[];
+  stages_labels: Record<string, string>;
+  stages_descriptions: Record<string, string>;
+}
+
+export interface CreatePipelineRequest {
+  workspaceid: string;
+  teamspaceid: string;
+  payload: CreatePipelinePayload;
+}
+
+export interface CreatePipelineResponse {
+  success: boolean;
+  message: string;
+}
+
+/** API accepts ISO date `YYYY-MM-DD` or datetime string */
+export type CreateDealPriorityApi = 'low' | 'medium' | 'high' | 'urgent';
+
+/** Body for POST `/pipelines/:pipeline_id/deals` */
+export interface CreateDealPayload {
+  name: string;
+  company_name: string;
+  contact: { name: string; email: string };
+  currency: string;
+  value: number;
+  close_date: string;
+  source: string;
+  stage: string;
+  priority: CreateDealPriorityApi;
+  description: string;
+  assigned_to: string[];
+}
+
+export interface CreateDealRequest {
+  workspaceid: string;
+  teamspaceid: string;
+  pipeline_id: string;
+  payload: CreateDealPayload;
+}
+
+export interface CreateDealNotePayload {
+  type: string;
+  note: string;
+  visibility: 'team' | 'private';
+  is_pinned: boolean;
+  related_activity_id: string | null;
+}
+
+export interface CreateDealNoteRequest {
+  workspaceid: string;
+  teamspaceid: string;
+  pipeline_id: string;
+  deal_id: string;
+  payload: CreateDealNotePayload;
+}
+
+type Comment = {
+  badge?: string;
+  content?: string;
+};
+
+export type ActivityItem = {
+  kind: 'summary';
+  title: string;
+  date_updated: string;
+  description: string;
+  timeAgo: string;
+  comment?: Comment[];
+  badge?: string;
+  content?: string;
+};

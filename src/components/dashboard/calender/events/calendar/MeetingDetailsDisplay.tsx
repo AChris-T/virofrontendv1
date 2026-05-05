@@ -8,46 +8,11 @@ import {
   PurposeIcons,
   ReportMeetingIcon,
 } from '@/assets/icons';
-
-interface Participant {
-  id: string;
-  display_name: string | null;
-  email: string;
-  display_picture: string | null;
-  is_host: boolean;
-}
-
-interface MeetingDetail {
-  id?: string;
-  organiser_email?: string;
-  title?: string;
-  description?: string | null;
-  meeting_url?: string;
-  platform?: string;
-  bot_mode?: string;
-  status?: string;
-  start_time?: string;
-  end_time?: string;
-  transcript_url?: string | null;
-  audio_recording_url?: string | null;
-  video_recording_url?: string | null;
-  notes?: string | null;
-  date_created?: string;
-  date_updated?: string;
-  participants?: Participant[];
-  pre_meeting_analysis?: string | null;
-  post_meeting_analysis?: string | null;
-  data?: Record<string, unknown>;
-  event?: Record<string, unknown>;
-}
-
-interface MeetingDetailsDisplayProps {
-  details?: MeetingDetail | null;
-  isLoading?: boolean;
-  isError?: boolean;
-}
-
-type TabType = 'overview' | 'preparation' | 'participants';
+import type {
+  MeetingDetailsDisplayProps,
+  Participant,
+  TabType,
+} from '@/components/types';
 
 const MeetingDetailsDisplay: React.FC<MeetingDetailsDisplayProps> = ({
   details,

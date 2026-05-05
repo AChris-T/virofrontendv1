@@ -77,7 +77,7 @@ export function Select({
 
       {/* Trigger */}
       <div
-        className={` ${focused ? 'gradient-border  ' : 'gradient-border '} h-full  relative rounded-lg p-[1px] transition-all duration-200 cursor-pointer"`}
+        className={` ${focused ? 'bg-[#262626] ' : 'bg-[#262626] '} h-full  relative rounded-lg p-[1px] transition-all duration-200 cursor-pointer"`}
         onClick={() => {
           setOpen((prev) => !prev);
           setFocused(true);

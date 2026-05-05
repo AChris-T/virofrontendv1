@@ -4,7 +4,6 @@ import {
   CreateCalenderIcon,
   //GlobeIcon,
   GoogleMeetIcon,
-  JoinMeetingIcon,
   MeetingIcon,
   MessageIcon,
   RefreshIcon,
@@ -21,6 +20,7 @@ import { duration } from '@/utils/data';
 import { Controller, useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { useCreateMeetingEventMutation } from '@/store/dashboard/dashboard.api';
+import Loader from '@/components/ui/Loader';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -200,7 +200,10 @@ export default function CreateMeeting({ onSuccess }: CreateMeetingProps) {
     };
 
     if (isRepeat) {
-      const untilIso = combineDateAndTime(data.until || data.date, data.endTime);
+      const untilIso = combineDateAndTime(
+        data.until || data.date,
+        data.endTime
+      );
       if (!untilIso) {
         setError('until', {
           type: 'manual',
@@ -262,16 +265,18 @@ export default function CreateMeeting({ onSuccess }: CreateMeetingProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col p-3 gap-4">
       <Input
-        className="h-[55px] py-3.5 font-general font-medium text-xl text-[#737373]"
+        className="h-[55px] py-3.5 font-general font-medium text-base text-[#94A3B8]"
         placeholder="Add Title"
         type="text"
         error={errors.title}
         {...register('title', { required: 'title is required' })}
       />
       <div className="flex items-center gap-2">
-        <CreateCalenderIcon />
+        <div className="flex items-center gap-2 bg-[#A9D80E0D] rounded p-1">
+          <CreateCalenderIcon />
+        </div>
         <Controller
           name="date"
           control={control}
@@ -287,8 +292,10 @@ export default function CreateMeeting({ onSuccess }: CreateMeetingProps) {
         />
       </div>
       <div className="flex items-center gap-2">
-        <ClockIcon />
-        <div className="flex">
+        <div className="flex items-center gap-2 bg-[#A9D80E0D] rounded p-1">
+          <ClockIcon />
+        </div>
+        <div className="flex w-full">
           <Controller
             name="startTime"
             control={control}
@@ -338,7 +345,9 @@ export default function CreateMeeting({ onSuccess }: CreateMeetingProps) {
         />
       </div> */}
       <div className="flex items-center gap-2">
-        <RefreshIcon />
+        <div className="flex items-center gap-2 bg-[#A9D80E0D] rounded p-1">
+          <RefreshIcon />
+        </div>
         <Controller
           name="duration"
           control={control}
@@ -440,61 +449,65 @@ export default function CreateMeeting({ onSuccess }: CreateMeetingProps) {
           </div>
         </div>
       )}
-      <div className="flex gap-3">
-        <VideoIcon />
-        <div className="flex flex-wrap gap-2">
+      <div className="flex gap-3 items-center">
+        <div className="flex items-center  bg-[#A9D80E0D] rounded p-1">
+          <VideoIcon />
+        </div>
+        <div className="flex w-full gap-2">
           <button
             type="button"
             onClick={() => toggleLink('googleMeet')}
-            className={`flex items-center text-sm px-3 py-2 gap-2 rounded-lg border transition-all
+            className={`flex items-center text-sm px-6 py-2 gap-2 rounded-lg border transition-all
               ${
                 selectedLink === 'googleMeet'
-                  ? 'inputgradients border-none text-white'
+                  ? 'bg-[#262626] border-none text-white'
                   : 'border-[#333333] text-[#A6A6A6] hover:border-white/20'
               }
             `}
           >
             <GoogleMeetIcon />
-            Add Google Meet Link
+            Google Meet
           </button>
           <button
             type="button"
             onClick={() => toggleLink('zoom')}
-            className={`flex items-center text-sm px-3 py-2 gap-2 rounded-lg border transition-all
+            className={`flex items-center text-sm px-6 py-2 gap-2 rounded-lg border transition-all
               ${
                 selectedLink === 'zoom'
-                  ? 'inputgradients border-none text-white'
+                  ? 'bg-[#262626] border-none text-white'
                   : 'border-[#333333] text-[#A6A6A6] hover:border-white/20'
               }
             `}
           >
             <ZoomIcon />
-            Add Zoom Link
+            Zoom
           </button>
           <button
             type="button"
             onClick={() => toggleLink('teams')}
-            className={`flex items-center text-sm px-3 py-2 gap-2 rounded-lg border transition-all
+            className={`flex items-center text-sm px-6 py-2 gap-2 rounded-lg border transition-all
               ${
                 selectedLink === 'teams'
-                  ? 'inputgradients border-none text-white'
+                  ? 'bg-[#262626] border-none text-white'
                   : 'border-[#333333] text-[#A6A6A6] hover:border-white/20'
               }
             `}
           >
             <TeamsMeetingIcon />
-            Add Microsoft Teams Link
+            Microsoft Teams
           </button>
         </div>
       </div>
       <div className="flex flex-col gap-3 w-full">
         <div className="flex items-center gap-3 w-full">
-          <MeetingIcon
-            width="24"
-            height="24"
-            className="shrink-0 text-[#666666]"
-          />
-          <div className="flex min-h-[52px] flex-1 items-center gap-2 rounded-[10px] gradient-border px-4 py-2.5">
+          <div className="flex items-center  bg-[#A9D80E0D] rounded p-1">
+            <MeetingIcon
+              width="24"
+              height="24"
+              className="shrink-0 text-[#A9D80E]"
+            />
+          </div>
+          <div className="flex min-h-[52px] flex-1 items-center gap-2 rounded-[10px] bg-[#2a2a2a] px-4 py-2.5">
             <input
               type="email"
               autoComplete="email"
@@ -552,7 +565,7 @@ export default function CreateMeeting({ onSuccess }: CreateMeetingProps) {
                   onClick={() =>
                     setParticipants((prev) => prev.filter((x) => x.id !== p.id))
                   }
-                  className="shrink-0 p-1 text-[#B33A3A] hover:text-[#d65555]"
+                  className="shrink-0 p-1 text-[#fff]"
                   aria-label={`Remove ${p.email}`}
                 >
                   <svg
@@ -571,9 +584,11 @@ export default function CreateMeeting({ onSuccess }: CreateMeetingProps) {
             ))}
           </ul>
         )}
-        <div className="text-white flex gap-3">
-          <MessageIcon />
-          <div className="gradient-border rounded-lg w-full p-2">
+        <div className="text-white flex items-start gap-3">
+          <div className="flex items-center  bg-[#A9D80E0D] rounded p-1">
+            <MessageIcon />
+          </div>
+          <div className="bg-[#2a2a2a] rounded-lg w-full p-2">
             <textarea
               rows={5}
               placeholder="Add meeting description"
@@ -590,16 +605,13 @@ export default function CreateMeeting({ onSuccess }: CreateMeetingProps) {
           </p>
         )}
       </div>
-      <div className="mx-10 mt-4">
+      <div className="mt-4">
         <button
-          className="flex font-general items-center cursor-pointer justify-center gap-2 w-[170px] px-4 py-3 text-sm font-medium text-white transition rounded-full shadow-theme-xs bg-green-100 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex border border-[#F9FEEB33] font-general items-center cursor-pointer justify-center gap-2 w-full px-4 py-3 text-bases font-medium text-[#101010] transition rounded-lg shadow-theme-xs bg-[#A9D80E] disabled:opacity-50 disabled:cursor-not-allowed"
           type="submit"
           disabled={isLoading}
         >
-          <span className="mt-1">
-            <JoinMeetingIcon />
-          </span>
-          {isLoading ? 'Creating...' : 'Create meeting'}
+          {isLoading ? <Loader /> : 'Create New Event'}
         </button>{' '}
       </div>
     </form>

@@ -1,7 +1,10 @@
-import { ViroIcon, ZoomIcon } from '@/assets/icons';
+import { GoogleMeetIcon, ViroIcon, ZoomIcon } from '@/assets/icons';
 import { MeetingCard } from '@/components/ui/cards/MeetingCards';
 import React from 'react';
 import Calender from './Calender';
+import { useUpcomingMeetingEventsQuery } from '@/store/dashboard/dashboard.api';
+import { timeRange } from '@/utils/timeRange';
+import { MeetingCardSkeleton } from '@/components/ui/skeleton/MeetingSkeleton';
 
 type EventDetailProps = {
   calendarEvents?: any;
@@ -23,30 +26,54 @@ export default function EventDetail({
   isLoadingEvents,
   interval = 'day',
   onIntervalChange,
-  //startDate,
-  //endDate,
   anchorDate = new Date(),
   onAnchorDateChange,
 }: EventDetailProps) {
+  const { data, isLoading } = useUpcomingMeetingEventsQuery(
+    {
+      workspaceid: workspaceId ?? '',
+      teamspaceid: teamspaceId ?? '',
+    },
+    { skip: !workspaceId || !teamspaceId }
+  );
+  console.log('Upcoming Events Data:', data);
+  if (isLoading)
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        {Array.from({ length: 3 }).map((_, i) => (
+          <MeetingCardSkeleton key={i} />
+        ))}
+      </div>
+    );
   return (
     <div className="space-y-3">
       <div className="space-y-4 ">
         <h3 className="text-[#797B72] text-xs font-semibold">
           UPCOMING EVENTS
         </h3>
-        <div className="grid lg:grid-cols-3 md:grid-cols-2 ">
-          <MeetingCard
-            title="Acme Sales Demo"
-            description="Sales pitch meeting with Acme sales person"
-            startTime="3:30 PM"
-            endTime="4:30 PM"
-            descriptionIcon={<ViroIcon fill="#C7F239" />}
-            meetingIcon={<ZoomIcon width="28" height="28" />}
-            showAssignToggle
-            isAssigned={true}
-            onToggleAssign={(val) => console.log('Assigned:', val)}
-            onJoin={() => console.log('Joining meeting...')}
-          />
+        <div className="grid lg:grid-cols-3 gap-3 md:grid-cols-2 ">
+          {data?.events?.map((event: any) => (
+            <MeetingCard
+              key={event.id}
+              title={event.title}
+              descriptionIcon={<ViroIcon fill="#C7F239" />}
+              description={event.description || 'No description available'}
+              startTime={event.startTime}
+              time={
+                event.start_time && event.end_time
+                  ? timeRange(event.start_time, event.end_time)
+                  : ''
+              }
+              meetingIcon={
+                event?.platform === 'zoom' ? (
+                  <ZoomIcon width="28" height="28" />
+                ) : (
+                  <GoogleMeetIcon />
+                )
+              }
+              endTime={event.endTime}
+            />
+          ))}
         </div>
       </div>
       <Calender

@@ -24,6 +24,12 @@ body {
   border-top-right-radius: 15px;
   border-top-left-radius: 15px;
 }
+.backgroundCust {
+  background: linear-gradient(rgba(38, 38, 38, 0.9)), url('/images/Fra.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+}
 
 .backgroundde {
   background: linear-gradient(rgba(23, 23, 23, 0.8)), url('/images/group.png');
@@ -557,19 +563,22 @@ body {
 }
 
 /* react-toastify - custom toast look */
-.Toastify__toast {
-  background: #000 !important;
-  border: 1px solid #333 !important; /* gray */
-  border-radius: 8px;
+.Toastify__toast.viro-toast {
+  background: #262626 !important;
+  border: 1px solid #333333 !important;
+  border-radius: 8px !important;
   color: #f9fafb !important;
-  font-family: var(--font-general);
-  font-size: 14px; /* tailwind text-lg */
-  line-height: 1.75rem; /* tailwind text-lg */
+  max-width: 440px !important;
+  width: 100% !important;
+  font-family: var(--font-general) !important;
+  padding: 12px 14px !important;
+  position: relative;
+  overflow: hidden;
 }
 
-.Toastify__toast-body {
-  color: #f9fafb !important;
-  font-family: var(--font-general);
+.Toastify__toast-body.viro-toast__body {
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
 .Toastify__close-button {
@@ -578,20 +587,51 @@ body {
 }
 
 .Toastify__progress-bar {
-  background: #6b7280 !important;
+  background: #404040 !important;
 }
 
-/* Make icons match the gray look */
-.Toastify__toast-icon {
-  color: #6b7280 !important;
-  fill: #6b7280 !important;
+.viro-toast__content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-/* Ensure status variants don't change the background/border */
-.Toastify__toast--success,
-.Toastify__toast--error,
-.Toastify__toast--info,
-.Toastify__toast--warning {
-  background: #000 !important;
-  border: 1px solid #6b7280 !important;
+.viro-toast__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.viro-toast__left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.viro-toast__icon {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid;
+  border-radius: 999px;
+}
+
+.viro-toast__title {
+  font-weight: 500;
+  font-size: 14px;
+  font-family: var(--font-general);
+}
+
+.viro-toast__message {
+  font-size: 16px;
+  font: medium;
+  line-height: 24px;
+  color: #f8f8f8;
+}
+
+/* Ensure toasts always appear above modals/overlays */
+.Toastify__toast-container {
+  z-index: 100000 !important;
 }

@@ -16,6 +16,7 @@ type SelectDropdownProps<T extends string> = {
   className?: string;
   triggerClassName?: string;
   menuClassName?: string;
+  openOnMount?: boolean;
 };
 
 export default function SelectDropdown<T extends string>({
@@ -27,6 +28,7 @@ export default function SelectDropdown<T extends string>({
   className,
   triggerClassName,
   menuClassName,
+  openOnMount = false,
 }: SelectDropdownProps<T>) {
   const [isOpen, setIsOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -35,6 +37,12 @@ export default function SelectDropdown<T extends string>({
     () => options.find((option) => option.value === value),
     [options, value]
   );
+
+  useEffect(() => {
+    if (openOnMount) {
+      setIsOpen(true);
+    }
+  }, [openOnMount]);
 
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
@@ -81,7 +89,7 @@ export default function SelectDropdown<T extends string>({
       {isOpen && (
         <div
           role="listbox"
-          className={`absolute -right-10  z-50 mt-3  min-w-[140px] overflow-hidden rounded-[6px]  bg-[#0F0F0F] shadow-xl ${menuClassName ?? ''}`}
+          className={`absolute -right-16  z-50 mt-3  min-w-[140px] overflow-hidden rounded-[6px]  bg-[#262626] shadow-xl ${menuClassName ?? ''}`}
         >
           {options.map((option) => {
             const isSelected = option.value === value;

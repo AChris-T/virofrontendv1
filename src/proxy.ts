@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { getSessionCookie } from '@/lib/session';
 
-// ✅ renamed from "middleware" to "proxy"
 export async function proxy(request: NextRequest) {
   const session = await getSessionCookie();
   const token = typeof session === 'string' ? session : session?.token;

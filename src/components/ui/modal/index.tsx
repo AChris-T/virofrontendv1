@@ -61,7 +61,7 @@ export const Modal: React.FC<ModalProps> = ({
     : 'relative w-full  rounded-[15px] mx-auto border-[#333333] border  dark:bg-gray-900';
 
   return createPortal(
-    <div className="fixed inset-0 flex items-center justify-center overflow-y-auto modal z-99999">
+    <div className="fixed inset-0 flex items-center justify-center overflow-y-auto modal z-[99999]">
       {!isFullscreen && (
         <div
           className="fixed inset-0 h-full w-full bg-[#0F0F0FE0] backdrop-blur-xs"
@@ -84,7 +84,9 @@ export const Modal: React.FC<ModalProps> = ({
             </button>
           )}
         </div>
-        <div className="bg-[#2E2E2E] m-2 rounded-lg">{children}</div>
+        <div className="bg-[#2E2E2E] max-h-[500px] overflow-y-scroll m-2 rounded-lg">
+          {children}
+        </div>
       </div>
     </div>,
     document.body

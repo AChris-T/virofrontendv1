@@ -1,8 +1,8 @@
 type GreetingPeriod = 'morning' | 'afternoon' | 'evening';
 
 interface GreetingOptions {
-  date?: Date;          // optional override (useful for testing)
-  locale?: string;      // future extensibility
+  date?: Date; // optional override (useful for testing)
+  locale?: string; // future extensibility
 }
 
 export function getGreeting(options: GreetingOptions = {}): string {
@@ -21,4 +21,20 @@ export function getGreeting(options: GreetingOptions = {}): string {
   }
 
   return `Good ${period}`;
+}
+
+export function formatTimeTo12Hr(isoString: string): string {
+  const date = new Date(isoString);
+  const now = new Date();
+
+  const diffMs = now.getTime() - date.getTime();
+  const diffSeconds = Math.floor(diffMs / 1000);
+  const diffMinutes = Math.floor(diffSeconds / 60);
+  const diffHours = Math.floor(diffMinutes / 60);
+  const diffDays = Math.floor(diffHours / 24);
+
+  if (diffSeconds < 60) return `${diffSeconds}secs ago`;
+  if (diffMinutes < 60) return `${diffMinutes}mins ago`;
+  if (diffHours < 24) return `${diffHours}hrs ago`;
+  return `${diffDays} days ago`;
 }
